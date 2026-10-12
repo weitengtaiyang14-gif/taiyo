@@ -5,38 +5,59 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="CLASSIFIED DOSSIER — SUBJECT: TAIYO | 極秘調査報告書">
 <title>DOSSIER: TAIYO</title>
-<meta name="theme-color" content="#08080a">
+<meta name="theme-color" content="#070708">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Share+Tech+Mono&family=Shippori+Mincho:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Share+Tech+Mono&family=Shippori+Mincho:wght@500;700;800&family=Yomogi&display=swap" rel="stylesheet">
 <style>
-/* Layout: a leaked case file — sticky file-tab nav, numbered FILE sections, clearance meter that rises as the reader declassifies. Single dark look by design. */
+/* Layout: a seized case file. Classification strip, file-tab section heads, evidence boards. UV light reveals investigator ink; clearance rises as the reader breaks seals. Single dark look by design. */
 :root{
   color-scheme:dark;
-  --bg:#08080a; --panel:#111116; --panel-2:#0c0c10; --line:#22222d; --line-2:#2e2e3c;
-  --red:#ff2a4b; --red-dark:#5c0010; --red-glow:rgba(255,42,75,.38); --red-wash:rgba(255,42,75,.07);
+  --bg:#070708; --panel:#0f0f13; --panel-2:#0b0b0e; --line:#1f1f28; --line-2:#2c2c38;
+  --red:#ff2a4b; --red-dark:#4a000d; --red-glow:rgba(255,42,75,.38); --red-wash:rgba(255,42,75,.07);
   --gold:#d4af37; --cyan:#00e1ef; --green:#00ff88; --green-wash:rgba(0,255,136,.08);
-  --text:#e2e2e8; --dim:#a4a4b4; --muted:#767688; --white:#fff; --ink:#000;
-  --mono:'Share Tech Mono',ui-monospace,'SFMono-Regular',Menlo,monospace;
+  --uv:#b98cff; --uv-glow:rgba(160,110,255,.7);
+  --text:#e2e2e8; --dim:#a2a2b2; --muted:#727284; --white:#fff; --ink:#000;
+  --mono:'Share Tech Mono',ui-monospace,Menlo,monospace;
   --serif:'Shippori Mincho','Hiragino Mincho ProN','Yu Mincho',serif;
-  --head:'Cinzel','Shippori Mincho',serif;
+  --display:'Dela Gothic One','Hiragino Sans',sans-serif;
+  --hand:'Yomogi','Klee One',cursive;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:84px}
+html{scroll-behavior:smooth;scroll-padding-top:96px}
 body{margin:0;background:var(--bg);color:var(--text);font-family:var(--serif);line-height:1.8;overflow-x:hidden;
-  background-image:radial-gradient(circle at 50% 0%,rgba(255,42,75,.09),transparent 65%);}
+  background-image:radial-gradient(ellipse at 50% -10%,rgba(255,42,75,.10),transparent 60%);}
+body::before{content:"";position:fixed;inset:-50%;pointer-events:none;z-index:210;opacity:.06;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain .8s steps(4) infinite}
+@keyframes grain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-1%,-2%)}}
 body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;
-  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.025) 0 1px,transparent 1px 4px);}
+  background:repeating-linear-gradient(to bottom,rgba(255,255,255,.022) 0 1px,transparent 1px 4px);}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
-.wrap{width:100%;max-width:1140px;margin:auto;padding-inline:18px}
+.wrap{width:100%;max-width:1160px;margin:auto;padding-inline:18px}
 .mono{font-family:var(--mono)}
+.lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:2px;color:var(--muted)}
+
+/* CURSOR */
+@media (pointer:fine){
+  body.cc,body.cc a,body.cc button,body.cc .rd,body.cc label{cursor:none}
+  body.cc input{cursor:text}
+}
+#cur{position:fixed;left:0;top:0;z-index:700;pointer-events:none;display:none}
+#cur .ring{position:absolute;width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid var(--red);transition:width .2s,height .2s,margin .2s,border-color .2s,transform .2s}
+#cur .ring::before,#cur .ring::after{content:"";position:absolute;background:var(--red)}
+#cur .ring::before{left:50%;top:-8px;bottom:-8px;width:1px}
+#cur .ring::after{top:50%;left:-8px;right:-8px;height:1px}
+#cur .co{position:absolute;left:24px;top:14px;font-family:var(--mono);font-size:.6rem;color:var(--red);white-space:nowrap;letter-spacing:1px}
+#cur.hot .ring{width:54px;height:54px;margin:-27px 0 0 -27px;border-color:var(--gold);transform:rotate(45deg)}
+#cur.hot .ring::before,#cur.hot .ring::after{background:var(--gold)}
 
 /* LOADER */
-#loader{position:fixed;inset:0;z-index:999;background:#030305;display:flex;flex-direction:column;justify-content:space-between;
-  padding:max(32px,env(safe-area-inset-top,0px)) 24px max(32px,env(safe-area-inset-bottom,0px));font-family:var(--mono);transition:opacity .6s,visibility .6s}
+#loader{position:fixed;inset:0;z-index:999;background:#030304;display:flex;flex-direction:column;justify-content:space-between;
+  padding:max(32px,env(safe-area-inset-top,0px)) 24px max(32px,env(safe-area-inset-bottom,0px));font-family:var(--mono);transition:opacity .5s,visibility .5s}
 #loader.done{opacity:0;visibility:hidden;pointer-events:none}
-#log{font-size:.88rem;line-height:1.9;color:var(--green);text-shadow:0 0 6px rgba(0,255,136,.45);max-width:820px;overflow-wrap:anywhere}
+#log{font-size:.86rem;line-height:1.9;color:var(--green);text-shadow:0 0 6px rgba(0,255,136,.45);max-width:820px;overflow-wrap:anywhere}
 #log p{margin:0}#log .w{color:var(--red);text-shadow:0 0 6px var(--red-glow)}
 .caret{display:inline-block;width:.6em;height:1em;background:var(--green);vertical-align:-2px;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
@@ -45,132 +66,182 @@ a{color:inherit;text-decoration:none}
 .skip{align-self:flex-end;background:transparent;border:1px solid var(--red);color:var(--red);padding:8px 16px;font-family:var(--mono);letter-spacing:2px;cursor:pointer}
 .skip:hover{background:var(--red);color:var(--ink)}
 
-/* HEADER */
-header{position:sticky;top:env(safe-area-inset-top,0px);z-index:100;background:rgba(8,8,10,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-.nav{height:64px;display:flex;align-items:center;justify-content:space-between;gap:14px}
-.logo{font-family:var(--head);font-weight:900;font-size:1.02rem;letter-spacing:.1em;color:var(--white);display:flex;align-items:center;gap:10px;white-space:nowrap}
-.stamp-s{background:var(--red);color:var(--ink);font-family:var(--mono);font-size:.62rem;padding:2px 6px;letter-spacing:1px}
-nav{display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:.72rem;letter-spacing:1px}
-nav a{color:var(--muted);padding:6px 9px;border:1px solid transparent;transition:.2s}
+/* CLASSIFICATION STRIP + HEADER */
+.strip{background:var(--red);color:var(--ink);font-family:var(--mono);font-size:.66rem;letter-spacing:3px;text-align:center;padding:3px 8px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:160;background:rgba(7,7,8,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{height:60px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{font-family:var(--display);font-size:1rem;letter-spacing:.06em;color:var(--white);display:flex;align-items:center;gap:10px;white-space:nowrap}
+.stamp-s{background:var(--red);color:var(--ink);font-family:var(--mono);font-size:.6rem;padding:2px 6px;letter-spacing:1px}
+nav{display:flex;align-items:center;gap:2px;font-family:var(--mono);font-size:.7rem;letter-spacing:1px}
+nav a{color:var(--muted);padding:6px 8px;border:1px solid transparent;transition:.2s}
 nav a:hover{color:var(--red)}
 nav a.on{color:var(--white);border-color:var(--line-2);background:var(--panel)}
-.nav-cta{border-color:var(--red)!important;color:var(--red)!important;background:var(--red-wash)}
-.nav-cta:hover{background:var(--red)!important;color:var(--ink)!important}
+.uvbtn{margin-left:6px;font-family:var(--mono);font-size:.7rem;letter-spacing:1px;background:transparent;border:1px solid var(--uv);color:var(--uv);padding:6px 10px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+.uvbtn::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--uv);box-shadow:0 0 8px var(--uv)}
+.uvbtn[aria-pressed="true"]{background:var(--uv);color:var(--ink)}
+.uvbtn[aria-pressed="true"]::before{background:var(--ink);box-shadow:none}
 .clr{height:2px;background:var(--line);position:relative}
 .clr i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .6s}
 
+/* SIDE CODE */
+.sidecode{position:fixed;left:6px;top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;font-family:var(--mono);font-size:.6rem;letter-spacing:4px;color:var(--line-2);z-index:5;pointer-events:none}
+@media (max-width:1240px){.sidecode{display:none}}
+
 /* HERO */
-.hero{padding-block:56px 72px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
+.hero{padding-block:52px 70px;display:grid;grid-template-columns:1.25fr .75fr;gap:44px;align-items:center;position:relative}
 .hero>*{min-width:0}
-.status{font-family:var(--mono);font-size:.76rem;color:var(--red);letter-spacing:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.status{font-family:var(--mono);font-size:.74rem;color:var(--red);letter-spacing:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .status::before{content:"";width:8px;height:8px;background:var(--red);border-radius:50%;box-shadow:0 0 8px var(--red);animation:pulse 1.5s infinite}
 @keyframes pulse{50%{opacity:.25}}
-.ts{display:inline-block;margin-top:16px;border:3px double var(--red);color:var(--red);font-family:var(--mono);font-size:.78rem;padding:4px 12px;letter-spacing:3px;transform:rotate(-3deg);background:rgba(128,0,20,.2);box-shadow:0 0 10px var(--red-glow)}
-h1{font-size:clamp(2.3rem,5.4vw,4.9rem);font-weight:800;line-height:1.14;margin:18px 0 24px;color:var(--white);letter-spacing:-.02em;text-wrap:balance}
-h1 .hl{color:var(--red);text-shadow:0 0 22px var(--red-glow)}
+.ts{display:inline-block;margin-top:16px;border:3px double var(--red);color:var(--red);font-family:var(--mono);font-size:.78rem;padding:4px 12px;letter-spacing:3px;transform:rotate(-3deg);background:rgba(128,0,20,.2)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(2.2rem,5.6vw,5rem);line-height:1.16;margin:18px 0 24px;color:var(--white);letter-spacing:.01em;text-wrap:balance;position:relative}
+h1 .hl{color:var(--red)}
+h1.gl{animation:glitch .32s steps(2) 1}
+@keyframes glitch{
+  0%{text-shadow:3px 0 var(--red),-3px 0 var(--cyan);transform:translate(0)}
+  25%{text-shadow:-5px 0 var(--red),4px 0 var(--cyan);transform:translate(2px,-1px) skewX(-6deg);clip-path:inset(12% 0 55% 0)}
+  50%{text-shadow:4px 0 var(--red),-2px 0 var(--cyan);transform:translate(-3px,1px);clip-path:inset(60% 0 8% 0)}
+  75%{text-shadow:-2px 0 var(--red),2px 0 var(--cyan);transform:translate(1px) skewX(4deg);clip-path:none}
+  100%{text-shadow:none;transform:none}}
 .lead{font-size:1rem;color:var(--dim);max-width:34em;line-height:2;border-left:2px solid var(--red);padding-left:18px;margin:0 0 30px}
 .btns{display:flex;flex-wrap:wrap;gap:12px}
-.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border:1px solid var(--line);background:var(--panel);color:var(--white);font-family:var(--mono);font-size:.84rem;letter-spacing:1px;cursor:pointer;transition:.2s}
-.btn:hover{border-color:var(--red);color:var(--red);box-shadow:0 0 15px var(--red-glow);transform:translateY(-2px)}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 22px;border:1px solid var(--line-2);background:var(--panel);color:var(--white);font-family:var(--mono);font-size:.84rem;letter-spacing:1px;cursor:pointer;transition:.2s;position:relative;overflow:hidden}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.18) 50%,transparent 70%);transform:translateX(-120%);transition:transform .5s}
+.btn:hover::after{transform:translateX(120%)}
+.btn:hover{border-color:var(--red);color:var(--red)}
 .btn.red{background:var(--red);color:var(--ink);border-color:var(--red)}
 .btn.red:hover{background:#ff4763;color:var(--ink)}
 
-.card{background:var(--panel);border:1px solid var(--line);padding:24px;position:relative;box-shadow:0 20px 50px rgba(0,0,0,.8)}
-.card::before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,var(--red),var(--gold))}
+/* dossier card */
+.tilt{transform-style:preserve-3d;transition:transform .25s ease-out;will-change:transform;position:relative}
+.tilt .glare{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at var(--gx,50%) var(--gy,0%),rgba(255,255,255,.10),transparent 45%);opacity:0;transition:opacity .3s}
+.tilt:hover .glare{opacity:1}
+.card{background:var(--panel);border:1px solid var(--line-2);padding:24px;box-shadow:0 30px 60px rgba(0,0,0,.8)}
+.clip{position:absolute;top:-14px;left:28px;width:16px;height:44px;border:3px solid #8a8a96;border-radius:9px;border-bottom-color:transparent;transform:rotate(-8deg)}
 .card-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:18px;font-family:var(--mono);font-size:.7rem;color:var(--muted)}
-.photo{position:relative;width:100%;max-width:100%;aspect-ratio:16/10;background:#050507;border:1px solid var(--line);overflow:hidden;margin-bottom:18px;cursor:pointer}
+.photo{position:relative;width:100%;max-width:100%;aspect-ratio:16/10;background:#040405;border:1px solid var(--line);overflow:hidden;margin-bottom:18px;cursor:pointer}
 .photo canvas{width:100%;height:100%;display:block}
-.photo .cap{position:absolute;left:10px;bottom:8px;font-family:var(--mono);font-size:.66rem;letter-spacing:2px;color:var(--muted)}
+.photo .cap{position:absolute;left:10px;bottom:8px;font-family:var(--mono);font-size:.64rem;letter-spacing:2px;color:var(--muted)}
 .photo .cap b{color:var(--red);font-weight:400}
 .photo .corner{position:absolute;width:14px;height:14px;border:1px solid var(--red)}
 .c1{top:8px;left:8px;border-right:0!important;border-bottom:0!important}.c2{top:8px;right:8px;border-left:0!important;border-bottom:0!important}
 .c3{bottom:8px;right:8px;border-left:0!important;border-top:0!important}
-.meta{font-family:var(--mono);font-size:.78rem;display:grid;gap:8px}
+.meta{font-family:var(--mono);font-size:.76rem;display:grid;gap:7px}
 .meta div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed rgba(255,255,255,.08);padding-bottom:4px}
-.meta span{color:var(--muted);white-space:nowrap}.meta strong{font-weight:400;text-align:right}
+.meta span{color:var(--muted);white-space:nowrap}.meta strong{font-weight:400;text-align:right;color:var(--white)}
+
+/* UV INK */
+.uv{position:absolute;font-family:var(--hand);color:var(--uv);text-shadow:0 0 10px var(--uv-glow);font-size:1rem;line-height:1.4;opacity:0;pointer-events:none;transform:rotate(-4deg);z-index:3;max-width:min(280px,80vw);transition:opacity .4s}
+body.uvon .uv{opacity:1}
+.uv.r{transform:rotate(3deg)}
+.uv b{font-family:var(--mono);font-weight:400;border:1px dashed var(--uv);padding:0 6px;letter-spacing:2px}
+#uvMask{position:fixed;inset:0;z-index:150;pointer-events:none;opacity:0;transition:opacity .4s;
+  background:radial-gradient(circle 150px at var(--mx,50%) var(--my,50%),rgba(40,10,90,.05) 0,rgba(40,10,90,.25) 110px,rgba(3,1,8,.93) 170px)}
+body.uvon #uvMask{opacity:1}
+.uvhint{font-family:var(--mono);font-size:.7rem;color:var(--uv);letter-spacing:1px;margin-top:18px;display:flex;gap:8px;align-items:center}
 
 /* TICKER */
-.ticker{background:var(--red-dark);border-block:1px solid var(--red);overflow:hidden;white-space:nowrap;padding:10px 0;font-family:var(--mono);font-size:.78rem;color:var(--white);letter-spacing:2px}
-.ticker .track{display:inline-flex;animation:tick 32s linear infinite}
+.ticker{background:var(--red-dark);border-block:1px solid var(--red);overflow:hidden;white-space:nowrap;padding:9px 0;font-family:var(--mono);font-size:.76rem;color:var(--white);letter-spacing:2px}
+.ticker .track{display:inline-flex;animation:tick 34s linear infinite}
 .ticker span{margin:0 22px}.ticker b{color:var(--gold);font-weight:400}
 @keyframes tick{to{transform:translateX(-50%)}}
 
 /* SECTIONS */
-section{padding-block:84px;border-bottom:1px solid var(--line)}
-.sh{margin-bottom:44px}
-.sno{font-family:var(--mono);color:var(--red);font-size:.78rem;letter-spacing:2px;margin-bottom:8px}
-.sh h2{font-size:clamp(1.9rem,4.4vw,3.2rem);margin:0;color:var(--white);letter-spacing:.02em;line-height:1.3;text-wrap:balance}
+section{padding-block:84px;border-bottom:1px solid var(--line);position:relative}
+.sh{margin-bottom:42px;position:relative}
+.tab{display:inline-flex;gap:10px;align-items:center;font-family:var(--mono);font-size:.74rem;letter-spacing:2px;color:var(--ink);background:var(--red);padding:4px 14px 4px 10px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 100%,0 100%);margin-bottom:14px}
+.sh h2{font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,4.2vw,3rem);margin:0;color:var(--white);line-height:1.3;text-wrap:balance}
 .sh p{color:var(--muted);font-size:.94rem;margin:10px 0 0;max-width:38em}
-.lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:2px;color:var(--muted)}
+.sh .ghost{position:absolute;right:0;top:-18px;font-family:var(--display);font-size:clamp(4rem,12vw,9rem);color:transparent;-webkit-text-stroke:1px var(--line-2);line-height:1;pointer-events:none;user-select:none}
 
 /* ABOUT */
 .about{display:grid;grid-template-columns:.8fr 1.2fr;gap:36px}
 .about>*{min-width:0}
-.box{background:var(--panel);border:1px solid var(--line);padding:28px}
-.box h3{font-size:1.25rem;color:var(--gold);margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.box{background:var(--panel);border:1px solid var(--line);padding:28px;position:relative}
+.box h3{font-size:1.2rem;color:var(--gold);margin:0 0 14px;border-bottom:1px solid var(--line);padding-bottom:12px}
 .box p{color:var(--dim);font-size:.9rem;margin:0}
-.rule{font-family:var(--mono);font-size:.74rem;color:var(--red);margin-top:22px}
+.rule{font-family:var(--mono);font-size:.72rem;color:var(--red);margin-top:22px}
 .rule-steps{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
 .rule-steps span{font-size:1rem;color:var(--white);border:1px solid var(--line-2);padding:4px 10px;transition:.3s}
 .rule-steps span.lit{border-color:var(--red);color:var(--red);box-shadow:0 0 12px var(--red-glow)}
 .quote{font-size:1.25rem;color:var(--white);line-height:1.8;background:var(--red-wash);border-left:3px solid var(--red);padding:18px 22px;margin:0 0 22px}
-.quote small{display:block;font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:2px;margin-top:6px}
+.quote small{display:block;font-family:var(--mono);font-size:.66rem;color:var(--muted);letter-spacing:2px;margin-top:6px}
 .body-t{color:#c4c4d2;line-height:1.95;margin:0}
 .values{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
 .vc{background:var(--panel-2);border:1px solid var(--line);padding:18px;transition:.2s}
 .vc:hover{border-color:var(--red);transform:translateY(-3px)}
-.vc .n{font-family:var(--mono);color:var(--red);font-size:1.1rem}
+.vc .n{font-family:var(--mono);color:var(--red);font-size:.8rem;letter-spacing:2px}
 .vc h4{margin:4px 0 6px;font-size:1rem;color:var(--white)}
 .vc p{font-size:.82rem;color:var(--muted);margin:0;line-height:1.7}
 
+/* TRAINING */
+.train{margin-top:44px;border-top:1px dashed var(--line-2);padding-top:28px;position:relative}
+.train-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px 16px;flex-wrap:wrap;margin-bottom:18px}
+.train-h .t{font-family:var(--mono);color:var(--red);font-size:.78rem;letter-spacing:2px}
+.tg{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:14px}
+.tc{background:var(--panel-2);border:1px solid var(--line);padding:18px;min-width:0;transition:.2s}
+.tc:hover{border-color:var(--red)}
+.tc.lead-c{border-color:rgba(212,175,55,.55);background:rgba(212,175,55,.03)}
+.tc-top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.rank{font-family:var(--mono);font-size:.62rem;letter-spacing:1px;color:var(--gold);border:1px solid var(--gold);padding:1px 6px;white-space:nowrap}
+.tc h4{margin:10px 0 8px;font-size:1.1rem;color:var(--white)}
+.tc dl{margin:0;display:grid;gap:6px}
+.tc dl div{display:grid;grid-template-columns:3.2em 1fr;gap:8px;font-size:.84rem;line-height:1.7}
+.tc dt{font-family:var(--mono);font-size:.72rem;color:var(--red);padding-top:2px}
+.tc dd{margin:0;color:var(--dim)}
+
 /* OPERATIONS */
 .ops{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
-.op{background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column;transition:.3s;min-width:0}
-.op:hover{border-color:var(--red);box-shadow:0 10px 30px rgba(255,42,75,.14);transform:translateY(-4px)}
-.op-v{height:150px;background:#050508;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.op-v .code{position:absolute;font-family:var(--mono);font-size:3.4rem;color:rgba(255,255,255,.05);letter-spacing:8px}
+.op{background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column;min-width:0}
+.op:hover{border-color:var(--red)}
+.op-v{height:150px;background:#040406;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.op-v .code{position:absolute;font-family:var(--display);font-size:3.6rem;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.08);letter-spacing:6px}
 .op-v .grid{position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:24px 24px;opacity:.35}
-.op-v .scan{position:absolute;left:0;right:0;height:40px;top:-40px;background:linear-gradient(transparent,rgba(255,42,75,.18),transparent)}
+.op-v .scan{position:absolute;left:0;right:0;height:40px;top:-40px;background:linear-gradient(transparent,rgba(255,42,75,.2),transparent)}
 .op:hover .scan{animation:scan 1.4s linear infinite}
 @keyframes scan{to{top:150px}}
 .badge{position:relative;background:var(--red-wash);border:1px solid var(--red);color:var(--red);font-family:var(--mono);font-size:.76rem;padding:6px 14px;letter-spacing:2px}
 .op-b{padding:24px;flex-grow:1;display:flex;flex-direction:column;justify-content:space-between;gap:16px}
 .op-m{font-family:var(--mono);font-size:.7rem;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}
-.st{display:inline-flex;align-items:center;gap:6px}.st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.st{display:inline-flex;align-items:center;gap:6px}.st::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;animation:pulse 1.8s infinite}
 .st.prog{color:var(--gold)}.st.dep{color:var(--green)}.st.on{color:var(--cyan)}
-.op h3{font-size:1.3rem;color:var(--white);margin:0 0 10px;line-height:1.5}
+.op h3{font-size:1.25rem;color:var(--white);margin:0 0 10px;line-height:1.5}
 .op p{font-size:.88rem;color:var(--dim);margin:0;line-height:1.85}
 .op-f{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:14px}
 .tags{display:flex;flex-wrap:wrap;gap:6px}
-.tag{font-family:var(--mono);font-size:.66rem;background:#1a1a24;border:1px solid #333344;color:var(--gold);padding:2px 8px}
-.op-f a{font-family:var(--mono);font-size:.74rem;color:var(--cyan)}
-.op-f a:hover{color:var(--red)}
+.tag{font-family:var(--mono);font-size:.66rem;background:#16161e;border:1px solid #30303e;color:var(--gold);padding:2px 8px}
+.go{font-family:var(--mono);font-size:.74rem;color:var(--ink);background:var(--cyan);padding:5px 10px;letter-spacing:1px;transition:.2s}
+.go:hover{background:var(--white)}
+.go.dim{background:transparent;color:var(--cyan);border:1px solid var(--cyan)}
+.x{font-family:var(--mono);color:var(--red);font-size:.8em}
 
 /* TERMINAL */
-.term{background:#040406;border:1px solid var(--red);margin-top:40px;box-shadow:inset 0 0 30px rgba(255,42,75,.1)}
+.term{background:#030304;border:1px solid var(--red);margin-top:40px;box-shadow:inset 0 0 40px rgba(255,42,75,.08);position:relative}
 .term-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--red-dark);font-family:var(--mono);font-size:.72rem;color:var(--red);letter-spacing:2px}
 .term-in{padding:26px}
-.term h3{font-size:1.35rem;color:var(--white);margin:0 0 6px}
+.term h3{font-size:1.3rem;color:var(--white);margin:0 0 6px}
 .term p{font-size:.88rem;color:var(--dim);margin:0}
 .term code{font-family:var(--mono);color:var(--cyan);background:#0f0f15;padding:1px 6px;border:1px solid var(--line)}
-.screen{margin-top:18px;background:#020203;border:1px solid var(--line);padding:14px;height:220px;overflow-y:auto;font-family:var(--mono);font-size:.82rem;line-height:1.7;color:var(--green)}
+.screen{margin-top:18px;background:#010102;border:1px solid var(--line);padding:14px;height:230px;overflow-y:auto;font-family:var(--mono);font-size:.82rem;line-height:1.7;color:var(--green);text-shadow:0 0 4px rgba(0,255,136,.35)}
 .screen .u{color:var(--cyan)}.screen .e{color:var(--red)}.screen .g{color:var(--gold)}.screen .m{color:var(--muted)}
-.screen .ok{border:1px solid var(--green);background:var(--green-wash);padding:10px 12px;margin:6px 0;color:var(--green)}
+.screen .ok{border:1px solid var(--green);background:var(--green-wash);padding:10px 12px;margin:6px 0}
 .tin{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.tin label{display:flex;align-items:center;gap:8px;flex:1 1 240px;background:#0f0f15;border:1px solid var(--line);padding:0 12px;font-family:var(--mono);color:var(--red)}
-.tin label:focus-within{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,225,239,.25)}
+.tin label{display:flex;align-items:center;gap:8px;flex:1 1 240px;background:#0d0d12;border:1px solid var(--line);padding:0 12px;font-family:var(--mono);color:var(--red)}
+.tin label:focus-within{border-color:var(--cyan)}
 .tin input{flex:1;min-width:0;background:transparent;border:0;outline:0;padding:12px 0;color:var(--cyan);font-family:var(--mono);font-size:1rem;text-transform:uppercase}
 .keys{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .keys button{font-family:var(--mono);font-size:.72rem;background:transparent;border:1px dashed var(--line-2);color:var(--muted);padding:4px 10px;cursor:pointer}
 .keys button:hover{border-color:var(--cyan);color:var(--cyan)}
 .keys button.used{border-style:solid;border-color:var(--green);color:var(--green)}
+.keys .secret{border-color:var(--uv);color:var(--uv)}
 
-/* REDACTED */
-.rd{background:var(--red);color:transparent;cursor:pointer;padding:0 6px;border-radius:2px;position:relative;display:inline-block;user-select:none;transition:background .3s,color .3s;border:0;font:inherit;text-align:left}
-.rd::before{content:"［極秘 / REDACTED］";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);white-space:nowrap;color:var(--ink);font-family:var(--mono);font-size:.72rem}
-.rd:hover{box-shadow:0 0 12px var(--red-glow)}
-.rd.open{background:var(--red-wash);color:var(--gold);outline:1px dashed var(--red);cursor:default;user-select:text}
-.rd.open::before{display:none}
+/* REDACTED (hold to burn) */
+.rd{background:var(--red);color:transparent;cursor:pointer;padding:0 6px;border-radius:2px;position:relative;display:inline-block;user-select:none;-webkit-user-select:none;touch-action:none;border:0;font:inherit;text-align:left;overflow:hidden}
+.rd::before{content:"長押しで解除";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);white-space:nowrap;color:var(--ink);font-family:var(--mono);font-size:.7rem;z-index:2}
+.rd::after{content:"";position:absolute;inset:0;width:calc(var(--p,0)*100%);background:linear-gradient(90deg,#ff9a3c,#fff2a8);mix-blend-mode:screen}
+.rd.open{background:var(--red-wash);color:var(--gold);outline:1px dashed var(--red);cursor:default;user-select:text;-webkit-user-select:text;animation:burn .5s ease-out}
+.rd.open::before,.rd.open::after{display:none}
+@keyframes burn{0%{filter:brightness(3) blur(2px)}100%{filter:none}}
 
 /* EVIDENCE */
 .evh{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
@@ -178,9 +249,9 @@ section{padding-block:84px;border-bottom:1px solid var(--line)}
 .counter b{color:var(--gold);font-weight:400}
 .ev{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
 .evc{background:var(--panel);border:1px solid var(--line);padding:24px;min-width:0;position:relative}
-.evc.gold{border-color:rgba(212,175,55,.55);background:rgba(212,175,55,.03)}
+.evc.gold{border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.03)}
 .evc.wide{grid-column:1/-1}
-.evc h3{font-size:1.18rem;color:var(--white);margin:6px 0 10px;line-height:1.5}
+.evc h3{font-size:1.15rem;color:var(--white);margin:6px 0 10px;line-height:1.5}
 .evc p{font-size:.88rem;color:var(--dim);margin:0;line-height:1.9}
 .evc .lbl.g{color:var(--gold)}
 .xl{display:inline-flex;gap:6px;font-family:var(--mono);font-size:.74rem;color:var(--cyan);margin-top:12px;text-decoration:underline;overflow-wrap:anywhere}
@@ -189,36 +260,28 @@ section{padding-block:84px;border-bottom:1px solid var(--line)}
 
 /* QUALIFICATIONS */
 .qtop{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:24px}
-.qcount{font-family:var(--head);font-size:clamp(3rem,8vw,5rem);color:var(--red);line-height:1;text-shadow:0 0 20px var(--red-glow);font-variant-numeric:tabular-nums}
+.qcount{font-family:var(--display);font-size:clamp(3rem,8vw,5rem);color:var(--red);line-height:1;font-variant-numeric:tabular-nums}
 .qfilter{display:flex;gap:6px;flex-wrap:wrap}
-.qfilter button{font-family:var(--mono);font-size:.74rem;background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:6px 12px;cursor:pointer;letter-spacing:1px}
+.qfilter button{font-family:var(--mono);font-size:.72rem;background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:6px 12px;cursor:pointer;letter-spacing:1px}
 .qfilter button[aria-pressed="true"]{border-color:var(--red);color:var(--white);background:var(--red-wash)}
 .qg{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 .qb{background:var(--panel);border:1px solid var(--line);padding:24px;min-width:0;transition:opacity .3s}
-.qb.dim{opacity:.22}
-.qb h3{font-size:1.1rem;color:var(--gold);border-bottom:1px solid var(--line);padding-bottom:10px;margin:0;display:flex;justify-content:space-between;gap:10px;align-items:baseline}
-.qb h3 .mono{font-size:.72rem;color:var(--muted)}
+.qb.dim{opacity:.2}
+.qb h3{font-size:1.06rem;color:var(--gold);border-bottom:1px solid var(--line);padding-bottom:10px;margin:0;display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.qb h3 .mono{font-size:.7rem;color:var(--muted)}
 .qt{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.q{font-family:var(--mono);font-size:.78rem;background:#161620;border:1px solid #2a2a3a;color:var(--text);padding:6px 12px;transition:.2s}
+.q{font-family:var(--mono);font-size:.78rem;background:#14141c;border:1px solid #2a2a3a;color:var(--text);padding:6px 12px;transition:.2s}
 .q:hover{border-color:var(--red);color:var(--red);background:var(--red-wash)}
 .q.star{border-color:var(--gold);color:var(--gold)}
-
-/* FIELD */
-.fg{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
-.fc{background:var(--panel);border:1px solid var(--line);padding:24px;min-width:0;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
-.fc .loc{font-family:var(--mono);font-size:.7rem;color:var(--red);border:1px solid var(--red);padding:6px 8px;text-align:center;line-height:1.4}
-.fc .loc b{display:block;font-size:1.4rem;font-weight:400;color:var(--white)}
-.fc h3{font-size:1.15rem;color:var(--white);margin:2px 0 6px}
-.fc p{font-size:.86rem;color:var(--dim);margin:0}
 
 /* MISSION LOG */
 .fstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
 .fs{background:var(--panel);border:1px solid var(--line);padding:16px;min-width:0}
-.fs b{display:block;font-family:var(--head);font-size:2.2rem;line-height:1.1;color:var(--white);font-variant-numeric:tabular-nums}
-.fs.hot b{color:var(--red);text-shadow:0 0 14px var(--red-glow)}
+.fs b{display:block;font-family:var(--display);font-weight:400;font-size:2.2rem;line-height:1.1;color:var(--white);font-variant-numeric:tabular-nums}
+.fs.hot b{color:var(--red)}
 .log{list-style:none;margin:0;padding:0 0 0 22px;border-left:1px solid var(--line-2);display:grid;gap:12px}
-.le{position:relative;background:var(--panel);border:1px solid var(--line);padding:14px 18px;display:grid;grid-template-columns:7.5em 1fr auto;gap:14px;align-items:center;transition:border-color .2s}
-.le:hover{border-color:var(--red)}
+.le{position:relative;background:var(--panel);border:1px solid var(--line);padding:14px 18px;display:grid;grid-template-columns:7.5em 1fr auto;gap:14px;align-items:center;transition:border-color .2s,transform .2s}
+.le:hover{border-color:var(--red);transform:translateX(4px)}
 .le::before{content:"";position:absolute;left:-28px;top:50%;width:11px;height:11px;margin-top:-5px;background:var(--bg);border:2px solid var(--muted);border-radius:50%}
 .le.award::before{border-color:var(--gold);background:var(--gold)}
 .le.sched{border-style:dashed}.le.sched::before{border-color:var(--cyan)}
@@ -230,35 +293,87 @@ section{padding-block:84px;border-bottom:1px solid var(--line)}
 .lc{font-family:var(--mono);font-size:.66rem;letter-spacing:1px;padding:3px 8px;border:1px solid var(--line-2);color:var(--dim);white-space:nowrap}
 .lc.c-award{border-color:var(--gold);color:var(--gold)}.lc.c-local{border-color:var(--red);color:var(--red)}
 .lc.c-club{border-color:var(--cyan);color:var(--cyan)}.lc.c-school{border-color:var(--green);color:var(--green)}
-.x{font-family:var(--mono);color:var(--red);font-size:.8em}
-@media (max-width:860px){.fstats{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:560px){.le{grid-template-columns:1fr;gap:6px}.lc{justify-self:start}}
 
 /* CONTACT */
-.cbox{background:linear-gradient(135deg,#100005,#1a000a);border:1px solid var(--red);padding:48px 24px;text-align:center}
-.cbox h2{font-family:var(--serif);font-size:clamp(1.7rem,4vw,2.4rem);color:var(--white);margin:14px 0 8px}
+.cbox{background:linear-gradient(135deg,#0e0004,#18000a);border:1px solid var(--red);padding:48px 24px;text-align:center;position:relative}
+.cbox h2{font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,4vw,2.3rem);color:var(--white);margin:14px 0 8px}
 .cbox>p{color:var(--dim);max-width:30em;margin:auto;font-size:.92rem}
-.links{display:flex;flex-direction:column;gap:12px;max-width:600px;margin:28px auto 0;text-align:left}
-.lr{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:rgba(255,255,255,.03);border:1px solid var(--line);font-family:var(--mono);font-size:.86rem;color:var(--white);transition:.2s}
+.links{display:flex;flex-direction:column;gap:12px;max-width:620px;margin:28px auto 0;text-align:left}
+.lr{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;background:rgba(255,255,255,.03);border:1px solid var(--line-2);font-family:var(--mono);font-size:.86rem;color:var(--white);transition:.2s;flex-wrap:wrap}
+.lr>span{min-width:0;overflow-wrap:anywhere}
+.lr small{display:block;color:var(--muted);font-size:.66rem;letter-spacing:2px}
 a.lr:hover{border-color:var(--red);background:var(--red);color:var(--ink)}
-.lr.todo{border-style:dashed;color:var(--muted)}
-.lr.todo em{font-style:normal;color:var(--gold);font-size:.72rem}
+a.lr:hover small{color:var(--ink)}
 .copy{font-family:var(--mono);font-size:.72rem;background:transparent;border:1px solid var(--red);color:var(--red);padding:4px 10px;cursor:pointer}
 .copy:hover{background:var(--red);color:var(--ink)}
 
 footer{padding-block:28px;font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:center}
 footer .wrap{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap}
 
-/* TOAST */
-#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140%);background:var(--panel);border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:.8rem;padding:10px 16px;letter-spacing:1px;z-index:300;transition:transform .35s;max-width:calc(100% - 32px);text-align:center}
+/* TOAST + FINAL STAMP + ALERT */
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);background:var(--panel);border:1px solid var(--gold);color:var(--gold);font-family:var(--mono);font-size:.8rem;padding:10px 16px;letter-spacing:1px;z-index:300;transition:transform .35s;max-width:calc(100% - 32px);text-align:center}
 #toast.show{transform:translate(-50%,0)}
+#final{position:fixed;inset:0;z-index:500;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:rgba(3,3,4,.86);padding:24px;text-align:center}
+#final .big{font-family:var(--display);font-size:clamp(1.8rem,8vw,6rem);color:var(--red);border:6px double var(--red);padding:4px clamp(10px,3vw,26px);max-width:100%;transform:rotate(-8deg);letter-spacing:.06em;animation:slam .45s cubic-bezier(.2,1.6,.4,1) both}
+#final[hidden]{display:none}
 
+/* HACK SEQUENCE + SECRET ARCHIVE */
+#hack{position:fixed;inset:0;z-index:600;background:#000;overflow:hidden;font-family:var(--mono)}
+#hack[hidden]{display:none}
+.hk-slices{position:absolute;inset:0;pointer-events:none}
+.hk-slices i{position:absolute;left:0;right:0;background:repeating-linear-gradient(90deg,var(--red) 0 2px,transparent 2px 7px);mix-blend-mode:screen;opacity:.0}
+.hk-rain{position:absolute;inset:0;padding:16px;font-size:.78rem;line-height:1.45;color:var(--green);white-space:pre-wrap;overflow:hidden;opacity:.85;overflow-wrap:anywhere}
+.hk-rain .r{color:var(--red)}.hk-rain .y{color:var(--gold)}
+.hk-big{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:min(92vw,900px)}
+.hk-big h2{font-family:var(--display);font-weight:400;font-size:clamp(2.2rem,9vw,6.5rem);color:var(--red);margin:0;line-height:1.05;letter-spacing:.02em;text-shadow:4px 0 var(--cyan),-4px 0 var(--red)}
+.hk-big p{color:var(--white);letter-spacing:3px;margin:14px 0 0;font-size:.9rem}
+.hk-big .pbar{height:6px;border:1px solid var(--red);margin:18px auto 0;max-width:420px}
+.hk-big .pbar i{display:block;height:100%;width:0;background:var(--red)}
+#hack.flash{animation:hkflash .12s steps(1) 6}
+@keyframes hkflash{50%{background:var(--red)}}
+.hk-note{position:absolute;bottom:calc(10px + env(safe-area-inset-bottom,0px));left:0;right:0;text-align:center;font-size:.62rem;color:var(--muted);letter-spacing:2px}
+#secret{position:fixed;inset:0;z-index:610;background:#020203;overflow-y:auto;color:var(--text);
+  background-image:radial-gradient(ellipse at 50% 0,rgba(0,255,136,.08),transparent 60%),repeating-linear-gradient(to bottom,rgba(0,255,136,.03) 0 1px,transparent 1px 3px)}
+#secret[hidden]{display:none}
+.sc-wrap{max-width:900px;margin:auto;padding:calc(40px + env(safe-area-inset-top,0px)) 18px calc(60px + env(safe-area-inset-bottom,0px))}
+.sc-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:.7rem;color:var(--green);letter-spacing:2px;border-bottom:1px solid rgba(0,255,136,.3);padding-bottom:10px}
+.sc-wrap h2{font-family:var(--display);font-weight:400;font-size:clamp(2rem,7vw,4rem);color:var(--green);margin:28px 0 6px;line-height:1.1;text-shadow:0 0 18px rgba(0,255,136,.4)}
+.sc-type{font-family:var(--mono);color:var(--dim);font-size:.9rem;min-height:3.4em;margin:0}
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:30px}
+.sc-box{border:1px solid rgba(0,255,136,.3);background:rgba(0,255,136,.03);padding:20px;min-width:0}
+.sc-box h3{font-family:var(--mono);font-weight:400;color:var(--green);font-size:.8rem;letter-spacing:2px;margin:0 0 12px}
+.ach{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.88rem}
+.ach li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed rgba(255,255,255,.08);padding-bottom:6px}
+.ach b{font-family:var(--mono);font-weight:400;color:var(--muted);white-space:nowrap}
+.ach li.got b{color:var(--green)}
+.cmds{font-family:var(--mono);font-size:.8rem;display:grid;gap:6px;color:var(--dim)}
+.cmds code{color:var(--cyan)}
+.sc-quote{grid-column:1/-1;font-size:1.15rem;line-height:1.9;color:var(--white);border-left:3px solid var(--green)}
+.sc-quote small{display:block;font-family:var(--mono);font-size:.66rem;color:var(--muted);letter-spacing:2px;margin-top:8px}
+.sc-score{font-family:var(--display);font-size:3rem;color:var(--green);line-height:1}
+.sc-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.sc-btn{font-family:var(--mono);font-size:.84rem;letter-spacing:1px;padding:12px 20px;border:1px solid var(--green);color:var(--green);background:transparent;cursor:pointer}
+.sc-btn:hover{background:var(--green);color:var(--ink)}
+.sc-btn.ghost{border-color:var(--line-2);color:var(--muted)}
+@media (max-width:640px){.sc-grid{grid-template-columns:1fr}}
+#final p{font-family:var(--mono);color:var(--text);letter-spacing:2px;margin:0}
+#final button{font-family:var(--mono);background:transparent;border:1px solid var(--line-2);color:var(--muted);padding:8px 16px;cursor:pointer;letter-spacing:2px}
+@keyframes slam{0%{transform:rotate(-8deg) scale(3);opacity:0}100%{transform:rotate(-8deg) scale(1);opacity:1}}
+body.shake main{animation:shake .4s}
+@keyframes shake{20%{transform:translate(-6px,2px)}40%{transform:translate(5px,-3px)}60%{transform:translate(-3px,1px)}80%{transform:translate(2px,-1px)}}
+#alarm{position:fixed;inset:0;z-index:450;pointer-events:none;box-shadow:inset 0 0 0 0 var(--red);transition:box-shadow .2s}
+#alarm.on{animation:alarm .9s 3}
+@keyframes alarm{50%{box-shadow:inset 0 0 120px 10px rgba(255,42,75,.55)}}
+
+@media (max-width:980px){.tg{grid-template-columns:1fr 1fr}}
 @media (max-width:860px){
-  .hero,.about,.ops,.ev,.qg,.fg{grid-template-columns:1fr}
+  .hero,.about,.ops,.ev,.qg{grid-template-columns:1fr}
   .values{grid-template-columns:1fr}
-  nav a:not(.nav-cta){display:none}
+  .fstats{grid-template-columns:repeat(2,1fr)}
+  nav a{display:none}
   .evc.wide{grid-column:auto}
 }
+@media (max-width:560px){.le{grid-template-columns:1fr;gap:6px}.lc{justify-self:start}.tg{grid-template-columns:1fr}}
 @media (max-width:420px){.logo .stamp-s{display:none}.term-in{padding:18px}}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
@@ -270,80 +385,89 @@ footer .wrap{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap}
 
 
 <div id="loader" role="dialog" aria-label="読み込み中">
-  <div>
-    <div id="log"></div>
-    <div class="bar"><i id="bar"></i></div>
-  </div>
-  <button class="skip" id="skip" type="button">[ SKIP PROTOCOL ↵ ]</button>
+  <div><div id="log"></div><div class="bar"><i id="bar"></i></div></div>
+  <button class="skip" id="skip" type="button">[ SKIP ↵ ]</button>
 </div>
+<div id="cur" aria-hidden="true"><div class="ring"></div><div class="co" id="coord">X000 Y000</div></div>
+<div id="uvMask" aria-hidden="true"></div>
+<div id="alarm" aria-hidden="true"></div>
+<div class="sidecode" aria-hidden="true">CASE #8402 — SUBJECT TAIYO — OITA PREFECTURE — DO NOT COPY</div>
 
+<div class="strip">機密区分：極秘 ／ 取扱注意 ／ 無断複製禁止 — TOP SECRET // HANDLE VIA SPECIAL CHANNELS ONLY</div>
 <header>
   <div class="wrap nav">
     <a class="logo" href="#top"><span class="stamp-s">LEAKED</span>DOSSIER: TAIYO</a>
-    <nav aria-label="セクション">
-      <a href="#about">PROFILE</a>
-      <a href="#projects">OPERATIONS</a>
-      <a href="#achievements">EVIDENCE</a>
-      <a href="#qualifications">SKILLS</a>
-      <a href="#community">FIELD</a>
-      <a class="nav-cta" href="#contact">INTERCEPT ↗</a>
-    </nav>
+    <div style="display:flex;align-items:center">
+      <nav aria-label="セクション">
+        <a href="#about">PROFILE</a><a href="#projects">OPS</a><a href="#achievements">EVIDENCE</a><a href="#qualifications">LICENSE</a><a href="#community">LOG</a><a href="#contact">CONTACT</a>
+      </nav>
+      <button class="uvbtn" id="uvbtn" type="button" aria-pressed="false" title="UVライトで隠し書きを探す（Uキー）">UV</button>
+    </div>
   </div>
   <div class="clr" title="機密解除率"><i id="clr"></i></div>
 </header>
 
 <main id="top">
   <div class="wrap hero">
-    <div>
+    <div style="position:relative">
       <div class="status">TARGET IDENTIFIED // CLEARANCE: <span id="lvl">LEVEL 5</span></div>
       <div class="ts">極秘調査報告書</div>
-      <h1>陰で暗躍する<br>高校生<span class="hl">開発者</span>の<br>全活動記録。</h1>
-      <p class="lead">大分県内にて、学業の裏で極秘システム構築、AI・CADを含む12の資格取得、44件に及ぶ地域・校内での潜入活動を行う対象者「TAIYO」の存在を感知。本データは特務機関が彼の全実績・行動ロジックを解析・特定したリーク文書である。</p>
+      <h1 id="h1">陰で暗躍する<br>高校生<span class="hl">開発者</span>の<br>全活動記録。</h1>
+      <p class="lead">大分県内で、授業の合間に予約システムを作り、映像チームを立ち上げ、休日は地域イベントの現場に立つ高校生がいる。コードネーム「TAIYO」。本ファイルは、その作戦記録・押収証拠・行動ログをまとめたものである。</p>
       <div class="btns">
-        <a class="btn red" href="#projects">作戦履歴を解析する ↘</a>
-        <a class="btn" href="#about">対象者の行動思想 ➔</a>
+        <a class="btn red" href="#projects">作戦記録を開く ↘</a>
+        <a class="btn" href="#about">対象者の思想 ➔</a>
       </div>
+      <div class="uvhint" id="uvhint">◉ このファイルには UV インクの書き込みがある。右上の [UV] で照らせ。</div>
+      <div class="uv" style="right:0;top:-6px">← 本人いわく<br>「作るのが好きなだけ」</div>
     </div>
 
-    <div class="card">
-      <div class="card-h"><span>DOSSIER NO: #8402-TAIYO</span><span style="color:var(--red)">[ RESTRICTED ]</span></div>
-      <div class="photo" id="photo" title="クリックで再スキャン">
-        <canvas id="fp" aria-label="指紋スキャン"></canvas>
-        <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span>
-        <div class="cap">BIOMETRIC SCAN · <b id="scanState">MATCHING…</b></div>
+    <div class="tilt" data-tilt>
+      <div class="card">
+        <span class="clip" aria-hidden="true"></span>
+        <div class="card-h"><span>DOSSIER NO: #8402-TAIYO</span><span style="color:var(--red)">[ RESTRICTED ]</span></div>
+        <div class="photo" id="photo" title="クリックで再スキャン">
+          <canvas id="fp" aria-label="指紋スキャン"></canvas>
+          <span class="corner c1"></span><span class="corner c2"></span><span class="corner c3"></span>
+          <div class="cap">BIOMETRIC SCAN · <b id="scanState">MATCHING…</b></div>
+        </div>
+        <div class="meta">
+          <div><span>CODE NAME</span><strong>BUILDER / CREATOR</strong></div>
+          <div><span>AFFILIATION</span><strong>FOUNDER, SKYSTEP PROD.</strong></div>
+          <div><span>FIELD</span><strong>BASEBALL / PIANO / MARINE / RESCUE</strong></div>
+          <div><span>EST. VALUE</span><strong style="color:var(--gold)">1,500 HOURS / ¥2.5M+</strong></div>
+          <div><span>STATUS</span><strong style="color:var(--green)">ACTIVE（高校生）</strong></div>
+          <div><span>SPECIALTY</span><strong style="color:var(--cyan)">GAS / LINE API / CREATIVE</strong></div>
+        </div>
       </div>
-      <div class="meta">
-        <div><span>CODE NAME</span><strong style="color:var(--white)">BUILDER / CREATOR</strong></div>
-        <div><span>AFFILIATION</span><strong style="color:var(--white)">FOUNDER, SKYSTEP PROD.</strong></div>
-        <div><span>EST. VALUE</span><strong style="color:var(--gold)">1,500 HOURS / ¥2.5M+</strong></div>
-        <div><span>STATUS</span><strong style="color:var(--green)">ACTIVE（高校生）</strong></div>
-        <div><span>SPECIALTY</span><strong style="color:var(--cyan)">GAS / LINE API / CREATIVE</strong></div>
-      </div>
+      <div class="glare"></div>
     </div>
   </div>
 
   <div class="ticker" aria-hidden="true"><div class="track">
-    <span>CLASSIFIED DOSSIER <b>✳</b></span><span>SYSTEM DEVELOPMENT <b>✳</b></span><span>44 ACTIVITY REPORTS <b>✳</b></span><span>LINE OA CERTIFIED ADVANCED <b>✳</b></span><span>EXPERT JUDGE ×2 <b>✳</b></span><span>OITA, JAPAN <b>✳</b></span>
-    <span>CLASSIFIED DOSSIER <b>✳</b></span><span>SYSTEM DEVELOPMENT <b>✳</b></span><span>44 ACTIVITY REPORTS <b>✳</b></span><span>LINE OA CERTIFIED ADVANCED <b>✳</b></span><span>EXPERT JUDGE ×2 <b>✳</b></span><span>OITA, JAPAN <b>✳</b></span>
+    <span>CASE #8402 <b>✳</b></span><span>LINE RESERVATION SYSTEM: LIVE <b>✳</b></span><span>44 ACTIVITY REPORTS <b>✳</b></span><span>LINE OA CERTIFIED ADVANCED <b>✳</b></span><span>OFFICIAL ARTIST PHOTOGRAPHER <b>✳</b></span><span>ART EXHIBITION JUDGE ×2 <b>✳</b></span><span>OITA, JAPAN <b>✳</b></span>
+    <span>CASE #8402 <b>✳</b></span><span>LINE RESERVATION SYSTEM: LIVE <b>✳</b></span><span>44 ACTIVITY REPORTS <b>✳</b></span><span>LINE OA CERTIFIED ADVANCED <b>✳</b></span><span>OFFICIAL ARTIST PHOTOGRAPHER <b>✳</b></span><span>ART EXHIBITION JUDGE ×2 <b>✳</b></span><span>OITA, JAPAN <b>✳</b></span>
   </div></div>
 
   <section id="about">
     <div class="wrap">
       <div class="sh">
-        <div class="sno">FILE 01 // PROFILE &amp; PHILOSOPHY</div>
+        <span class="ghost" aria-hidden="true">01</span>
+        <div class="tab">FILE 01 / PROFILE</div>
         <h2 data-scramble>押収された思想データ</h2>
-        <p>対象者「TAIYO」が残した手記および行動ログから解読された、彼の創作活動における根本思想。</p>
+        <p>本人のメモと行動ログから読み取れた、ものづくりの考え方。</p>
       </div>
       <div class="about">
         <div class="box">
           <h3>対象者プロフィール分析</h3>
-          <p>情報技術を学びながら、Webアプリ開発および映像・画像制作を展開。身近な不便を発見し「仕組みで解決する」ことを思考ルーティンとする。</p>
+          <p>情報技術を学びながら、Webアプリ開発と映像・画像制作を並行して行う。身の回りの不便を見つけると、まず「仕組みで解決できないか」を考える癖がある。</p>
           <div class="rule">EXECUTION RULE:
             <div class="rule-steps" id="rule"><span>BUILD.</span><span>TEST.</span><span>IMPROVE.</span></div>
           </div>
+          <div class="uv r" style="right:10px;bottom:-30px">作って、試して、直す。<br>この繰り返しが速い</div>
         </div>
         <div>
-          <blockquote class="quote">「何かを創ることが、ずっと好きでした。」<small>— RECOVERED HANDWRITTEN NOTE</small></blockquote>
+          <blockquote class="quote">「何かを創ることが、ずっと好きでした。」<small>RECOVERED HANDWRITTEN NOTE</small></blockquote>
           <p class="body-t">大切にしているのは、「誰のために、何を伝えるのか」ということ。見た目の美しさだけでは終わらない、見る人の心に残る作品を目指しています。昨日より今日、今日より明日。小さな一歩を積み重ねることで、より良いクリエイティブを届けられると信じています。</p>
           <div class="values">
             <div class="vc"><div class="n">STEP 1</div><h4>挑戦する一歩</h4><p>経験が少なくても恐れず、新しい技術を学び新しい表現に挑み続ける。</p></div>
@@ -352,69 +476,109 @@ footer .wrap{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap}
           </div>
         </div>
       </div>
+
+      <div class="train">
+        <div class="train-h"><span class="t">BACKGROUND // TRAINING RECORD</span><span class="lbl">過去の訓練記録</span></div>
+        <div class="tg">
+          <div class="tc lead-c">
+            <div class="tc-top"><span class="lbl">UNIT: BASEBALL</span><span class="rank">CAPTAIN</span></div>
+            <h4>野球</h4>
+            <dl>
+              <div><dt>小学生</dt><dd>エースで4番・副キャプテン</dd></div>
+              <div><dt>中3</dt><dd>クラブチームでエースで1番・キャプテンとしてチームをけん引</dd></div>
+            </dl>
+          </div>
+          <div class="tc">
+            <div class="tc-top"><span class="lbl">UNIT: PIANO</span><span class="rank">9 YEARS</span></div>
+            <h4>ピアノ</h4>
+            <dl><div><dt>期間</dt><dd>小1〜中3の9年間</dd></div></dl>
+          </div>
+          <div class="tc">
+            <div class="tc-top"><span class="lbl">UNIT: MARINE</span><span class="rank">B&amp;G</span></div>
+            <h4>B&amp;G海洋クラブ</h4>
+            <dl>
+              <div><dt>種目</dt><dd>カヤック・カヌー・SUP</dd></div>
+              <div><dt>救助</dt><dd>海での水難救助の基本知識</dd></div>
+            </dl>
+          </div>
+          <div class="tc">
+            <div class="tc-top"><span class="lbl">UNIT: BASE</span><span class="rank">3 YEARS</span></div>
+            <h4>水泳・陸上</h4>
+            <dl><div><dt>期間</dt><dd>小1〜小3</dd></div></dl>
+          </div>
+        </div>
+        <div class="uv" style="left:4%;bottom:-36px">キャプテン経験2回。<br>チームを引っぱるタイプ</div>
+      </div>
     </div>
   </section>
 
   <section id="projects">
     <div class="wrap">
       <div class="sh">
-        <div class="sno">FILE 02 // EXECUTED OPERATIONS</div>
+        <span class="ghost" aria-hidden="true">02</span>
+        <div class="tab">FILE 02 / OPERATIONS</div>
         <h2 data-scramble>構築されたシステム作戦</h2>
-        <p>対象者が密かに開発・運用を行っていたWebアプリケーションおよび制作プロジェクト。</p>
+        <p>対象者が作り、実際に動かしているアプリと制作プロジェクト。リンク先は本物。</p>
       </div>
       <div class="ops">
-        <article class="op">
-          <div class="op-v"><div class="grid"></div><div class="code">OP-01</div><div class="scan"></div><div class="badge">TabiDays✨ TOKYO 2027</div></div>
+        <article class="op tilt" data-tilt>
+          <div class="op-v"><div class="grid"></div><div class="code">OP-01</div><div class="scan"></div><div class="badge">TabiDays / TOKYO 2027</div></div>
           <div class="op-b"><div>
             <div class="op-m"><span>OPERATION: SCHOOL TRIP DX</span><span class="st prog">IN PROGRESS</span></div>
-            <h3>TabiDays — 修学旅行サポートアプリ</h3>
-            <p>スケジュール、お知らせ、写真共有を統合する修学旅行Webアプリ。生徒・先生・管理者・開発者の4権限構造を考慮した高度な情報設計を達成。</p>
+            <h3>TabiDays 修学旅行サポートアプリ</h3>
+            <p>スケジュール、お知らせ、写真共有を1つにまとめた修学旅行用のWebアプリ。生徒・先生・管理者・開発者の4つの権限で、見られる情報と操作を分けている。</p>
           </div>
-          <div class="op-f"><div class="tags"><span class="tag">GAS</span><span class="tag">Google Sheets</span><span class="tag">権限設計</span></div><a href="#contact">DETAILS ↗</a></div></div>
+          <div class="op-f"><div class="tags"><span class="tag">GAS</span><span class="tag">Google Sheets</span><span class="tag">権限設計</span></div><a class="go" href="https://tabidays-install.s250098.workers.dev/" target="_blank" rel="noopener">INSTALL ↗</a></div></div>
+          <div class="glare"></div>
         </article>
-        <article class="op">
+        <article class="op tilt" data-tilt>
           <div class="op-v"><div class="grid"></div><div class="code">OP-02</div><div class="scan"></div><div class="badge">DIGILAB / RESERVE</div></div>
           <div class="op-b"><div>
             <div class="op-m"><span>OPERATION: LINE BOT</span><span class="st dep">DEPLOYED</span></div>
             <h3>デジラボ LINE予約システム</h3>
-            <p>LINE Messaging APIとGoogle Apps Scriptを極秘連携。Webhookによるリアルタイム処理で自動受付・予約枠管理システムを構築完了。</p>
+            <p>LINEのトーク画面から予約できるシステム。LINE Messaging APIとGoogle Apps ScriptをWebhookでつなぎ、受付と予約枠の管理を自動化した。</p>
           </div>
-          <div class="op-f"><div class="tags"><span class="tag">LINE API</span><span class="tag">GAS</span><span class="tag">Webhook</span></div><a href="#contact">DETAILS ↗</a></div></div>
+          <div class="op-f"><div class="tags"><span class="tag">LINE API</span><span class="tag">GAS</span><span class="tag">Webhook</span></div><a class="go" href="https://lin.ee/7OdmnNS" target="_blank" rel="noopener">友だち追加 ↗</a></div></div>
+          <div class="glare"></div>
         </article>
-        <article class="op">
-          <div class="op-v"><div class="grid"></div><div class="code">OP-03</div><div class="scan"></div><div class="badge">SCHOOL TOOLKIT</div></div>
+        <article class="op tilt" data-tilt>
+          <div class="op-v"><div class="grid"></div><div class="code">OP-03</div><div class="scan"></div><div class="badge">SHEET → CHAT</div></div>
           <div class="op-b"><div>
-            <div class="op-m"><span>OPERATION: SCHOOL DX</span><span class="st dep">DEPLOYED</span></div>
-            <h3>学校向け業務改善ツール</h3>
-            <p>申込フォームからスプレッドシートへのデータ連携自動化。学校現場の複雑な手作業負担を削減するDXスクリプト群の開発。</p>
+            <div class="op-m"><span>OPERATION: NOTIFY BOT</span><span class="st dep">DEPLOYED</span></div>
+            <h3>スプレッドシート編集通知 Bot</h3>
+            <p>Googleスプレッドシートが編集されると、Google Apps Scriptが変更を検知してGoogle Chatのスペースに自動で通知する。シートを開いて確かめなくても、更新にすぐ気づける。</p>
           </div>
-          <div class="op-f"><div class="tags"><span class="tag">GAS</span><span class="tag">Forms</span><span class="tag">Automation</span></div><a href="#contact">DETAILS ↗</a></div></div>
+          <div class="op-f"><div class="tags"><span class="tag">GAS</span><span class="tag">Google Chat</span><span class="tag">Trigger</span></div><span class="lbl">INTERNAL USE</span></div></div>
+          <div class="glare"></div>
         </article>
-        <article class="op">
-          <div class="op-v"><div class="grid"></div><div class="code">OP-04</div><div class="scan"></div><div class="badge">SKYSTEP PROD</div></div>
+        <article class="op tilt" data-tilt>
+          <div class="op-v"><div class="grid"></div><div class="code">OP-04</div><div class="scan"></div><div class="badge">SKYSTEP PROD.</div></div>
           <div class="op-b"><div>
             <div class="op-m"><span>OPERATION: MEDIA CREATIVE</span><span class="st on">ONGOING</span></div>
             <h3>Skystep Production <span class="x">FOUNDER</span></h3>
-            <p>「その瞬間を未来へ」を掲げ、対象者が自ら立ち上げた写真・映像・デザインのクリエイティブチーム。人物・風景・グルメの撮影、ショート動画編集、サムネイル制作、SNS発信までを展開。現在<b style="color:var(--white)">8名</b>のメンバーを率い、月1作品の提出をルールに活動中。</p>
+            <p>「その瞬間を未来へ」を掲げ、対象者が自分で立ち上げた写真・映像・デザインのチーム。人物・風景・グルメの撮影、ショート動画編集、サムネイル制作、SNS発信まで行う。現在<b style="color:var(--white)">8名</b>のメンバーで、月1作品の提出をルールに活動中。</p>
           </div>
-          <div class="op-f"><div class="tags"><span class="tag">Founder</span><span class="tag">Photo / Video</span><span class="tag">Short Movie</span><span class="tag">Design</span></div><a href="https://skystep-production.github.io/Skystep_Production/" target="_blank" rel="noopener">VISIT SITE ↗</a></div></div>
+          <div class="op-f"><div class="tags"><span class="tag">Founder</span><span class="tag">Photo / Video</span><span class="tag">Design</span></div><a class="go dim" href="https://skystep-production.github.io/Skystep_Production/" target="_blank" rel="noopener">VISIT ↗</a></div></div>
+          <div class="glare"></div>
         </article>
       </div>
 
-      <div class="term">
-        <div class="term-top"><span>[ ENCRYPTED TERMINAL ]</span><span id="keyCount">KEYS 0/4</span></div>
+      <div class="term" id="terminal">
+        <div class="term-top"><span>[ ENCRYPTED TERMINAL ]</span><span id="keyCount">KEYS 0/5</span></div>
         <div class="term-in">
           <h3>機密暗号解読ターミナル</h3>
-          <p>暗号コードを入力して実行せよ。4つの鍵すべてで最高機密が開く。<code>HELP</code> でコマンド一覧。</p>
-          <div class="screen" id="screen" aria-live="polite"><div class="m">AGENCY SHELL v8.4.02 — 接続確立。コマンド待機中…</div></div>
+          <p>押収したパスコードは <code>OITA</code> <code>2027</code> <code>TAIYO</code> <code>VIVANT</code> の4つ。入力するか、下のボタンを押せば解読できる。5つ目は、このファイルのどこかに UV インクで書かれている。</p>
+          <div class="screen" id="screen" aria-live="polite"><div class="m">AGENCY SHELL v8.4.02 — 接続確立。</div><div class="g">押収済みパスコード：OITA / 2027 / TAIYO / VIVANT ／ 5つ目は不明</div></div>
+          <div class="lbl" style="margin-top:14px">SEIZED KEYS — タップで入力</div>
+          <div class="keys" id="keys" style="margin-top:6px">
+            <button type="button" data-k="OITA">OITA</button><button type="button" data-k="2027">2027</button><button type="button" data-k="TAIYO">TAIYO</button><button type="button" data-k="VIVANT">VIVANT</button><button type="button" class="secret" disabled id="secretKey">?????</button>
+          </div>
           <form class="tin" id="termForm" autocomplete="off">
-            <label for="termInput">&gt;<input id="termInput" placeholder="PASSCODE / COMMAND" spellcheck="false"></label>
+            <label for="termInput">&gt;<input id="termInput" placeholder="パスコードを入力（例：OITA）" spellcheck="false"></label>
             <button class="btn red" type="submit">DECRYPT ↵</button>
           </form>
-          <div class="keys" id="keys">
-            <button type="button" data-k="OITA">OITA</button><button type="button" data-k="2027">2027</button><button type="button" data-k="TAIYO">TAIYO</button><button type="button" data-k="VIVANT">VIVANT</button>
-          </div>
         </div>
+        <div class="uv r" style="right:16px;top:-22px">最後の鍵 → <b>SKYSTEP</b></div>
       </div>
     </div>
   </section>
@@ -422,10 +586,11 @@ footer .wrap{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap}
   <section id="achievements">
     <div class="wrap">
       <div class="sh evh">
+        <span class="ghost" aria-hidden="true">03</span>
         <div>
-          <div class="sno">FILE 03 // EVIDENCE &amp; RECOGNITION</div>
+          <div class="tab">FILE 03 / EVIDENCE</div>
           <h2 data-scramble>外部機関による評価証拠</h2>
-          <p>赤い黒塗り箇所［REDACTED］をクリック（タップ）して機密解除せよ。</p>
+          <p>赤い黒塗りは、長押しすると焼き切れて中身が読める。</p>
         </div>
         <div class="counter">DECLASSIFIED <b id="rdCount">0</b>/<span id="rdTotal">3</span></div>
       </div>
@@ -433,32 +598,39 @@ footer .wrap{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap}
         <div class="evc gold">
           <span class="pin">AWARD</span>
           <div class="lbl g">EVIDENCE #01</div>
-          <h3>こどもマネー川柳 メットライフ生命賞</h3>
-          <p>受賞作品：<br><button type="button" class="rd">「お金より 知識増やせば 夢ふえる」</button></p>
+          <h3>「お金より 知識増やせば 夢ふえる」</h3>
+          <p>こどもマネー川柳 受賞作品。<br>受賞した賞：<button type="button" class="rd">メットライフ生命賞</button></p>
+        </div>
+        <div class="evc gold">
+          <span class="pin">OFFICIAL</span>
+          <div class="lbl g">EVIDENCE #02</div>
+          <h3>佐伯火まつり アーティスト撮影</h3>
+          <p>2人組アーティスト「スーパーボーイズ」の写真・動画撮影を任された。撮った写真は<button type="button" class="rd">公式SNSのアイコン</button>などに採用されている。</p>
         </div>
         <div class="evc">
           <span class="pin">AWARD</span>
-          <div class="lbl">EVIDENCE #02</div>
-          <h3>大分県発明協会 アイデア賞</h3>
+          <div class="lbl">EVIDENCE #03</div>
+          <h3>大分県発明くふう展 アイデア賞</h3>
           <p>第84回大分県発明くふう展にてアイディア賞を受賞した記録を押収。</p>
-          <a class="xl" href="https://oita-hatumei.net/wp-content/uploads/2025/12/84ichiran.pdf" target="_blank" rel="noopener">受賞一覧PDFをインターセプト ↗</a>
+          <a class="xl" href="https://oita-hatumei.net/wp-content/uploads/2025/12/84ichiran.pdf" target="_blank" rel="noopener">受賞一覧PDF ↗</a>
         </div>
         <div class="evc gold">
           <span class="pin">×2</span>
-          <div class="lbl g">EVIDENCE #03</div>
+          <div class="lbl g">EVIDENCE #04</div>
           <h3>佐伯市美術展 審査員（2025・2026年 2回就任）</h3>
-          <p>第58回佐伯市美術展・写真の部にて、異例の<button type="button" class="rd">「高校生審査員」</button>として抜擢・権限を行使。</p>
-          <a class="xl" href="https://www.nbu-h.ed.jp/post/%E3%80%90news%E3%80%91%E7%AC%AC58%E5%9B%9E%E4%BD%90%E4%BC%AF%E5%B8%82%E7%BE%8E%E8%A1%93%E5%B1%95-%E5%86%99%E7%9C%9F%E3%81%AE%E9%83%A8-%E5%AF%A9%E6%9F%BB%E5%93%A1" target="_blank" rel="noopener">審査員就任の公認記事 ↗</a>
+          <p>部活動として佐伯市美術展に参加し、<button type="button" class="rd">写真の部の審査</button>を担当。2025年・2026年の2年続けて審査員を務めた。</p>
+          <a class="xl" href="https://www.nbu-h.ed.jp/post/%E3%80%90news%E3%80%91%E7%AC%AC58%E5%9B%9E%E4%BD%90%E4%BC%AF%E5%B8%82%E7%BE%8E%E8%A1%93%E5%B1%95-%E5%86%99%E7%9C%9F%E3%81%AE%E9%83%A8-%E5%AF%A9%E6%9F%BB%E5%93%A1" target="_blank" rel="noopener">学校の公式記事 ↗</a>
+          <div class="uv" style="right:14px;bottom:10px">2年連続で<br>審査を担当</div>
         </div>
         <div class="evc">
-          <div class="lbl">EVIDENCE #04</div>
-          <h3>大分学検定 記録保持</h3>
-          <p>大分学検定入門コースにおいて、<button type="button" class="rd">全体最高得点 ＆ 高校生最高得点</button>の二冠を獲得。</p>
-        </div>
-        <div class="evc wide">
           <div class="lbl">EVIDENCE #05</div>
-          <h3>CapCut 公認クリエイター認定</h3>
-          <p>公式クリエイターとして動画表現および編集スキルを継続的に行使。</p>
+          <h3>大分学検定 記録保持</h3>
+          <p>大分学検定入門コースで、<button type="button" class="rd">全体最高得点 ＆ 高校生最高得点</button>の二冠。</p>
+        </div>
+        <div class="evc">
+          <div class="lbl">EVIDENCE #06</div>
+          <h3>CapCut 公認クリエイター</h3>
+          <p>公式クリエイターとして、動画編集と表現の技術を発信し続けている。</p>
         </div>
       </div>
     </div>
@@ -467,9 +639,10 @@ footer .wrap{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap}
   <section id="qualifications">
     <div class="wrap">
       <div class="sh">
-        <div class="sno">FILE 04 // ACQUIRED LICENSES</div>
+        <span class="ghost" aria-hidden="true">04</span>
+        <div class="tab">FILE 04 / LICENSES</div>
         <h2 data-scramble>習得済み特殊技能・資格一覧</h2>
-        <p>対象者が自発的な研究により獲得した資格データベース。</p>
+        <p>押収した資格データ。AIとマーケティングに集中しているのが分かる。</p>
       </div>
       <div class="qtop">
         <div class="qcount" id="qcount">00</div>
@@ -500,13 +673,17 @@ footer .wrap{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap}
   <section id="community">
     <div class="wrap">
       <div class="sh">
-        <div class="sno">FILE 05 // FIELD MISSION LOG</div>
+        <span class="ghost" aria-hidden="true">05</span>
+        <div class="tab">FILE 05 / FIELD LOG</div>
         <h2 data-scramble>地域潜入・活動ログ</h2>
         <p>校内システムに登録された活動レポート44件から押収した行動記録。新しい順。</p>
       </div>
       <div class="fstats" id="fstats"></div>
       <div class="qfilter" id="lfilter" style="margin-bottom:22px"></div>
-      <ol class="log" id="flog"></ol>
+      <div style="position:relative">
+        <ol class="log" id="flog"></ol>
+        <div class="uv r" style="right:0;top:40%">週末はだいたい<br>どこかの現場にいる</div>
+      </div>
     </div>
   </section>
 
@@ -515,11 +692,12 @@ footer .wrap{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap}
       <div class="cbox">
         <div class="ts" style="margin-top:0">DIRECT INTERCEPT</div>
         <h2>対象者への接触・通信</h2>
-        <p>開発の依頼、コラボレーション、取材等の暗号通信はこちらから受け付けます。</p>
+        <p>開発の依頼、コラボレーション、取材の連絡はこちらへ。</p>
         <div class="links">
-          <a class="lr" href="https://skystep-production.github.io/Skystep_Production/" target="_blank" rel="noopener"><span>Skystep Production 公式サイト</span><span>↗</span></a>
-          <div class="lr todo"><span>GitHub Profile <em>［要設定］</em></span><span>—</span></div>
-          <div class="lr"><span>Skystep 窓口：<span id="mail" style="user-select:all">skystep_production@aol.com</span></span><button class="copy" id="copyMail" type="button">COPY</button></div>
+          <div class="lr"><span><small>SCHOOL MAIL</small><span class="addr">s250098@nbu-h.ed.jp</span></span><button class="copy" type="button" data-copy="s250098@nbu-h.ed.jp">COPY</button></div>
+          <a class="lr" href="https://lin.ee/7OdmnNS" target="_blank" rel="noopener"><span><small>DIGILAB LINE</small>デジラボ LINE予約システム</span><span>↗</span></a>
+          <a class="lr" href="https://skystep-production.github.io/Skystep_Production/" target="_blank" rel="noopener"><span><small>CREATIVE TEAM</small>Skystep Production 公式サイト</span><span>↗</span></a>
+          <div class="lr"><span><small>SKYSTEP CONTACT</small><span class="addr">skystep_production@aol.com</span></span><button class="copy" type="button" data-copy="skystep_production@aol.com">COPY</button></div>
         </div>
       </div>
     </div>
@@ -528,145 +706,291 @@ footer .wrap{display:flex;justify-content:center;gap:8px 18px;flex-wrap:wrap}
 
 <footer><div class="wrap"><span>CONFIDENTIAL DOSSIER // © <span id="year">2026</span> TAIYO PORTFOLIO</span><span>THIS FILE WILL NOT SELF-DESTRUCT.</span></div></footer>
 <div id="toast" role="status"></div>
+<div id="hack" hidden aria-live="assertive">
+  <div class="hk-rain" id="hkRain"></div>
+  <div class="hk-slices" id="hkSlices"></div>
+  <div class="hk-big" id="hkBig" hidden>
+    <h2 id="hkTitle">SYSTEM BREACH</h2>
+    <p id="hkSub">逆探知を開始…</p>
+    <div class="pbar"><i id="hkBar"></i></div>
+  </div>
+  <div class="hk-note">※ 演出です。あなたのPCには何も起きていません。</div>
+</div>
+
+<div id="secret" hidden role="dialog" aria-label="シークレットアーカイブ">
+  <div class="sc-wrap">
+    <div class="sc-top"><span>ROOT ACCESS // BACKDOOR OPEN</span><span>SECRET ARCHIVE — EYES ONLY</span></div>
+    <h2>SECRET ARCHIVE</h2>
+    <p class="sc-type" id="scType"></p>
+    <div class="sc-grid">
+      <div class="sc-box">
+        <h3>[ YOUR INVESTIGATION SCORE ]</h3>
+        <div class="sc-score" id="scScore">0/7</div>
+        <ul class="ach" id="scAch" style="margin-top:14px"></ul>
+      </div>
+      <div class="sc-box">
+        <h3>[ ALL HIDDEN COMMANDS ]</h3>
+        <div class="cmds">
+          <div><code>UV</code> ボタン / Uキー：隠し書きを照らす</div>
+          <div><code>SKYSTEP</code>：5つ目のパスコード</div>
+          <div><code>t-a-i-y-o</code>：このページへの裏口</div>
+          <div><code>↑↑↓↓←→←→BA</code>：UV強制点灯</div>
+          <div><code>WHOAMI / SUDO</code>：ターミナルで試せ</div>
+          <div><code>指紋を5連打</code>：スマホ用の裏口</div>
+          <div><code>F12 → Console</code>：調査員へのメモ</div>
+        </div>
+      </div>
+      <div class="sc-box sc-quote">「大分から世界へ。システム開発と映像表現の融合で、誰も見たことがないプロダクトを創り出す。」<small>RECOVERED FROM SUBJECT'S PRIVATE NOTE</small></div>
+    </div>
+    <div class="sc-actions">
+      <button class="sc-btn" type="button" id="scBack">表のファイルに戻る ↩</button>
+      <a class="sc-btn ghost" href="https://lin.ee/7OdmnNS" target="_blank" rel="noopener">デジラボLINEに接触 ↗</a>
+      <a class="sc-btn ghost" href="https://skystep-production.github.io/Skystep_Production/" target="_blank" rel="noopener">Skystep ↗</a>
+    </div>
+  </div>
+</div>
+
+<div id="final" hidden>
+  <div class="big">DECLASSIFIED</div>
+  <p>全機密解除 — CLEARANCE LEVEL 9</p>
+  <p style="color:var(--gold)">おめでとう。あなたは対象者のすべてを知った。</p>
+  <button type="button" id="finalClose">CLOSE FILE</button>
+</div>
 
 <script>
 (()=>{
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FINE=matchMedia('(pointer:fine)').matches;
 $('#year').textContent=new Date().getFullYear();
 
-/* toast */
-let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2800)}
+function alarm(){if(RM)return;const a=$('#alarm');a.classList.remove('on');void a.offsetWidth;a.classList.add('on');document.body.classList.add('shake');setTimeout(()=>document.body.classList.remove('shake'),450)}
 
-/* clearance meter: 3 redactions + 4 keys + scan */
-const state={rd:0,keys:new Set(),scan:false};
+/* clearance: 3 seals + 5 keys + scan */
+const state={rd:0,keys:new Set(),scan:false,max:false};
 function updateClr(){
-  const total=3+4+1,got=state.rd+state.keys.size+(state.scan?1:0);
+  const total=document.querySelectorAll('.rd').length+6,got=state.rd+state.keys.size+(state.scan?1:0);
   $('#clr').style.width=(got/total*100)+'%';
-  const lv=5+Math.floor(got/total*4);
-  $('#lvl').textContent='LEVEL '+lv;
-  if(got===total&&!state.max){state.max=1;toast('全機密解除完了 — CLEARANCE LEVEL 9')}
+  $('#lvl').textContent='LEVEL '+(5+Math.floor(got/total*4));
+  if(got===total&&!state.max){state.max=true;setTimeout(()=>{$('#final').hidden=false;alarm()},500)}
 }
+$('#finalClose').onclick=()=>{$('#final').hidden=true};
 
 /* loader */
-const lines=[['> INITIALIZING SECURE CONNECTION TO AGENCY DATABASE...'],['> BYPASSING FIREWALL PROT-8402...'],['> LOCATING DOSSIER: [SUBJECT: TAIYO]...'],['> WARNING: HIGHLY CLASSIFIED DATA LEAKED.','w'],['> DECRYPTING FILE CONTENT (100%)...']];
+const lines=[['> CONNECTING TO AGENCY ARCHIVE...'],['> BYPASSING FIREWALL PROT-8402...'],['> LOCATING DOSSIER [SUBJECT: TAIYO]...'],['> WARNING: FILE HAS BEEN LEAKED.','w'],['> DECRYPTING... 100%']];
 const loader=$('#loader');let closed=false;
-function close(){if(closed)return;closed=true;loader.classList.add('done');scrambleAll()}
+function close(){if(closed)return;closed=true;loader.classList.add('done');scrambleAll();setTimeout(glitchLoop,1200)}
 $('#skip').onclick=close;
 if(RM){close()}else{
   const log=$('#log');let li=0;
   (function nextLine(){
     if(closed)return;
-    if(li>=lines.length){setTimeout(close,450);return}
+    if(li>=lines.length){setTimeout(close,400);return}
     const [txt,cls]=lines[li];const p=document.createElement('p');if(cls)p.className=cls;log.appendChild(p);
     const caret=document.createElement('span');caret.className='caret';
     let ci=0;(function type(){if(closed)return;p.textContent=txt.slice(0,++ci);p.appendChild(caret);
-      if(ci<txt.length)setTimeout(type,14);else{caret.remove();li++;$('#bar').style.width=(li/lines.length*100)+'%';setTimeout(nextLine,140)}})();
+      if(ci<txt.length)setTimeout(type,13);else{caret.remove();li++;$('#bar').style.width=(li/lines.length*100)+'%';setTimeout(nextLine,120)}})();
   })();
-  setTimeout(close,6000);
+  setTimeout(close,5500);
 }
 
-/* heading scramble on reveal (text stays visible at rest) */
+/* h1 glitch loop */
+function glitchLoop(){if(RM)return;const h=$('#h1');const go=()=>{h.classList.remove('gl');void h.offsetWidth;h.classList.add('gl');setTimeout(go,3500+Math.random()*4000)};go()}
+$('#h1').addEventListener('pointerenter',()=>{if(RM)return;const h=$('#h1');h.classList.remove('gl');void h.offsetWidth;h.classList.add('gl')});
+
+/* heading scramble */
 const GL='アイウエオカキクケコ01#%$&@ABCDEFXYZ極秘';
 function scramble(el){if(RM||el.dataset.done)return;el.dataset.done=1;const fin=el.textContent;let f=0;const n=fin.length;
   const id=setInterval(()=>{f++;el.textContent=[...fin].map((c,i)=>i<f/2?c:(c===' '?' ':GL[Math.random()*GL.length|0])).join('');if(f/2>=n){clearInterval(id);el.textContent=fin}},28)}
-let io;function scrambleAll(){if(!('IntersectionObserver'in window))return;io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){scramble(e.target);io.unobserve(e.target)}}),{threshold:.6});$$('[data-scramble]').forEach(h=>io.observe(h))}
+function scrambleAll(){if(!('IntersectionObserver'in window))return;const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){scramble(e.target);io.unobserve(e.target)}}),{threshold:.6});$$('[data-scramble]').forEach(h=>io.observe(h))}
 
 /* nav active */
-const secs=$$('main section');const links=$$('nav a');
-const nio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}}),{rootMargin:'-45% 0px -50% 0px'});
-secs.forEach(s=>nio.observe(s));
+const links=$$('nav a');
+const nio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id))}),{rootMargin:'-45% 0px -50% 0px'});
+$$('main section').forEach(s=>nio.observe(s));
 
 /* rule steps */
 const steps=$$('#rule span');let si=0;if(!RM)setInterval(()=>{steps.forEach((s,i)=>s.classList.toggle('lit',i===si));si=(si+1)%steps.length},900);else steps.forEach(s=>s.classList.add('lit'));
 
-/* fingerprint canvas */
-const cv=$('#fp'),cx=cv.getContext('2d');let W,H,scanY=0,matched=false,t0=performance.now();
+/* custom cursor + UV position */
+const cur=$('#cur'),coord=$('#coord');let mx=innerWidth/2,my=innerHeight/2,cx2=mx,cy2=my;
+function setUV(x,y){document.documentElement.style.setProperty('--mx',x+'px');document.documentElement.style.setProperty('--my',y+'px')}
+addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;setUV(mx,my)},{passive:true});
+['touchstart','touchmove'].forEach(ev=>addEventListener(ev,e=>{const t=e.touches[0];if(t)setUV(t.clientX,t.clientY)},{passive:true}));
+if(FINE&&!RM){
+  document.body.classList.add('cc');cur.style.display='block';
+  (function loop(){cx2+=(mx-cx2)*.25;cy2+=(my-cy2)*.25;cur.style.transform=`translate(${cx2}px,${cy2}px)`;coord.textContent=`X${String(Math.round(mx)).padStart(4,'0')} Y${String(Math.round(my+scrollY)).padStart(5,'0')}`;requestAnimationFrame(loop)})();
+  document.addEventListener('pointerover',e=>{cur.classList.toggle('hot',!!e.target.closest('a,button,.rd,.photo,input,label'))});
+}
+
+/* tilt */
+if(FINE&&!RM)$$('[data-tilt]').forEach(el=>{
+  el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+    el.style.transform=`perspective(900px) rotateY(${(px-.5)*8}deg) rotateX(${(.5-py)*8}deg)`;el.style.setProperty('--gx',px*100+'%');el.style.setProperty('--gy',py*100+'%')});
+  el.addEventListener('pointerleave',()=>{el.style.transform=''});
+});
+
+/* UV */
+const uvb=$('#uvbtn');let uvSeen=false;
+function setUVMode(on){if(on)state.uv=true;document.body.classList.toggle('uvon',on);uvb.setAttribute('aria-pressed',on);if(on&&!uvSeen){uvSeen=true;toast('UVライト点灯。隠し書きを探せ（もう一度押すと消灯）')}}
+uvb.onclick=()=>setUVMode(!document.body.classList.contains('uvon'));
+addEventListener('keydown',e=>{if(e.target.matches('input'))return;if(e.code==='KeyU')setUVMode(!document.body.classList.contains('uvon'))});
+
+/* fingerprint */
+const cv=$('#fp'),c=cv.getContext('2d');let W,H,matched=false,t0=performance.now();
 const ridges=[];for(let i=0;i<26;i++)ridges.push({r:6+i*4.2,a0:Math.random()*6.28,gap:.3+Math.random()*1.1,wob:Math.random()*3});
-function size(){const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;cx.setTransform(d,0,0,d,0,0);W=r.width;H=r.height}
+function size(){const r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;c.setTransform(d,0,0,d,0,0);W=r.width;H=r.height}
 size();addEventListener('resize',size);
 function draw(now){
-  cx.clearRect(0,0,W,H);const ox=W/2,oy=H/2+6;const p=Math.min(1,(now-t0)/2600);
-  cx.lineWidth=1.3;
-  ridges.forEach((rg,i)=>{cx.beginPath();for(let a=rg.a0+rg.gap;a<rg.a0+6.28;a+=.06){const rr=rg.r+Math.sin(a*3+i)*rg.wob;const x=ox+Math.cos(a)*rr*.78,y=oy+Math.sin(a)*rr;a===rg.a0+rg.gap?cx.moveTo(x,y):cx.lineTo(x,y)}
-    const lit=matched?1:(oy-rg.r<scanY?1:0);cx.strokeStyle=lit?(matched?'rgba(255,42,75,.75)':'rgba(255,42,75,.5)'):'rgba(255,255,255,.08)';cx.stroke()});
-  if(!matched){scanY=p*H;cx.fillStyle='rgba(255,42,75,.9)';cx.fillRect(0,scanY,W,1.5);const g=cx.createLinearGradient(0,scanY-30,0,scanY);g.addColorStop(0,'rgba(255,42,75,0)');g.addColorStop(1,'rgba(255,42,75,.18)');cx.fillStyle=g;cx.fillRect(0,scanY-30,W,30);
+  c.clearRect(0,0,W,H);const ox=W/2,oy=H/2+6;const p=Math.min(1,(now-t0)/2600);const sy=p*H;c.lineWidth=1.3;
+  ridges.forEach((rg,i)=>{c.beginPath();let first=true;for(let a=rg.a0+rg.gap;a<rg.a0+6.28;a+=.06){const rr=rg.r+Math.sin(a*3+i)*rg.wob;const x=ox+Math.cos(a)*rr*.78,y=oy+Math.sin(a)*rr;first?c.moveTo(x,y):c.lineTo(x,y);first=false}
+    c.strokeStyle=matched?'rgba(255,42,75,.75)':(oy-rg.r<sy?'rgba(255,42,75,.5)':'rgba(255,255,255,.07)');c.stroke()});
+  if(!matched){c.fillStyle='rgba(255,42,75,.9)';c.fillRect(0,sy,W,1.5);const g=c.createLinearGradient(0,sy-30,0,sy);g.addColorStop(0,'rgba(255,42,75,0)');g.addColorStop(1,'rgba(255,42,75,.18)');c.fillStyle=g;c.fillRect(0,sy-30,W,30);
     if(p>=1){matched=true;$('#scanState').textContent='MATCH 99.7%';if(!state.scan){state.scan=true;updateClr()}}}
   requestAnimationFrame(draw)}
 if(RM){matched=true;$('#scanState').textContent='MATCH 99.7%';state.scan=true}
 requestAnimationFrame(draw);
-$('#photo').onclick=()=>{matched=false;t0=performance.now();$('#scanState').textContent='MATCHING…'};
+let taps=[];
+$('#photo').onclick=()=>{matched=false;t0=performance.now();$('#scanState').textContent='MATCHING…';
+  const n=performance.now();taps=[...taps,n].filter(t=>n-t<2000);if(taps.length>=5){taps=[];hack()}};
 
-/* redactions */
+/* redactions: hold to burn */
 const rds=$$('.rd');$('#rdTotal').textContent=rds.length;
-rds.forEach(b=>b.addEventListener('click',()=>{if(b.classList.contains('open'))return;b.classList.add('open');b.setAttribute('aria-pressed','true');state.rd++;$('#rdCount').textContent=state.rd;updateClr();if(state.rd===rds.length)toast('FILE 03 全証拠の機密解除に成功')}));
+function openRd(b){if(b.classList.contains('open'))return;b.classList.add('open');state.rd++;$('#rdCount').textContent=state.rd;updateClr();if(state.rd===rds.length)toast('FILE 03 の黒塗りをすべて解除した')}
+rds.forEach(b=>{let raf,start;
+  const stop=()=>{cancelAnimationFrame(raf);if(!b.classList.contains('open'))b.style.setProperty('--p',0)};
+  b.addEventListener('pointerdown',e=>{if(b.classList.contains('open'))return;e.preventDefault();start=performance.now();
+    (function step(n){const p=Math.min(1,(n-start)/700);b.style.setProperty('--p',p);if(p>=1)openRd(b);else raf=requestAnimationFrame(step)})(start)});
+  ['pointerup','pointerleave','pointercancel'].forEach(t=>b.addEventListener(t,stop));
+  b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openRd(b)}});
+  b.addEventListener('contextmenu',e=>e.preventDefault());
+});
 
 /* terminal */
 const scr=$('#screen'),inp=$('#termInput');
 const KEYS={
- OITA:'発信地を特定：大分県。対象者の活動拠点はここにある。',
- '2027':'作戦コード「TabiDays TOKYO 2027」に一致。修学旅行DXが進行中。',
- TAIYO:'対象者本人の認証コードを確認。プロフィール照合完了。',
- VIVANT:'別班コードを受理。陰で動く者の流儀を確認。'
+ OITA:'発信地を特定：大分県。活動拠点はここ。',
+ '2027':'作戦コード「TabiDays TOKYO 2027」に一致。修学旅行アプリが進行中。',
+ TAIYO:'対象者本人の認証コードを確認。照合完了。',
+ VIVANT:'別班コードを受理。陰で動く者の流儀を確認。',
+ SKYSTEP:'隠しコードを発見。UVインクを読んだな。対象者はSkystep Productionの創設者である。'
 };
-function out(html,cls){const d=document.createElement('div');if(cls)d.className=cls;d.innerHTML=html;scr.appendChild(d);scr.scrollTop=scr.scrollHeight}
+const queue=[];let typing=false;
+function out(text,cls,html){queue.push({text,cls,html});if(!typing)pump()}
+function pump(){const it=queue.shift();if(!it){typing=false;return}typing=true;const d=document.createElement('div');if(it.cls)d.className=it.cls;scr.appendChild(d);
+  if(it.html||RM){d.innerHTML=it.html||it.text;scr.scrollTop=scr.scrollHeight;pump();return}
+  let i=0;(function t(){d.textContent=it.text.slice(0,i+=2);scr.scrollTop=scr.scrollHeight;if(i<it.text.length)setTimeout(t,10);else pump()})()}
 function run(raw){
-  const c=raw.trim().toUpperCase();out('&gt; '+(c.replace(/[<>&]/g,'')||'(空)'),'u');
-  if(!c){out('[ERROR] PASSCODE REQUIRED.','e');return}
-  if(c==='HELP'){out('使えるコマンド： HELP / STATUS / LS / CLEAR / 暗号コード','g');return}
-  if(c==='CLEAR'){scr.innerHTML='';return}
-  if(c==='LS'){out('FILE01_PROFILE  FILE02_OPS  FILE03_EVIDENCE  FILE04_LICENSES(12)  FILE05_FIELD_LOG(44)','m');return}
-  if(c==='STATUS'){out(`鍵 ${state.keys.size}/4 ・ 黒塗り解除 ${state.rd}/${rds.length} ・ ${$('#lvl').textContent}`,'g');return}
-  if(KEYS[c]){const fresh=!state.keys.has(c);state.keys.add(c);
-    $$('#keys button').forEach(b=>{if(b.dataset.k===c)b.classList.add('used')});
-    out(`[ACCESS GRANTED] KEY ${c} ${fresh?'':'(取得済み)'}<br>${KEYS[c]}`);
-    $('#keyCount').textContent=`KEYS ${state.keys.size}/4`;updateClr();
-    if(state.keys.size===4&&fresh)out('<strong>【LEVEL 9 CLASSIFIED UNLOCKED】</strong><br>「大分から世界へ。システム開発と映像表現の融合で、誰も見たことがないプロダクトを創り出す。」<br><small>認証成功：対象者TAIYOの真の野望データが開示されました。</small>','ok');
-    else if(fresh)out(`残り ${4-state.keys.size} 個の鍵で最高機密が開く。`,'m');
+  const cmd=raw.trim().toUpperCase();out('> '+(cmd||'(空)'),'u');
+  if(!cmd)return out('[ERROR] パスコードを入力せよ。','e');
+  if(cmd==='HELP')return out('コマンド: HELP / LS / STATUS / WHOAMI / UV / CLEAR / パスコード','g');
+  if(cmd==='CLEAR'){scr.innerHTML='';return}
+  if(cmd==='LS')return out('FILE01_PROFILE  FILE02_OPS  FILE03_EVIDENCE  FILE04_LICENSES(12)  FILE05_FIELD_LOG(44)','m');
+  if(cmd==='STATUS')return out(`鍵 ${state.keys.size}/5 ・ 黒塗り ${state.rd}/${rds.length} ・ ${$('#lvl').textContent}`,'g');
+  if(cmd==='WHOAMI')return out('閲覧者：未登録の調査員。ただしこのファイルを読む権限は与えられている。','m');
+  if(cmd==='UV'){setUVMode(true);return out('UVライトを点灯した。','g')}
+  if(cmd.startsWith('SUDO')||cmd.startsWith('RM')){alarm();return out('[ALERT] 不正操作を検知。この端末は監視されている。','e')}
+  if(cmd==='BACKDOOR'){out('裏口を開く…','e');setTimeout(hack,600);return}
+  if(KEYS[cmd]){const fresh=!state.keys.has(cmd);state.keys.add(cmd);
+    $$('#keys button').forEach(b=>{if(b.dataset.k===cmd)b.classList.add('used')});
+    if(cmd==='SKYSTEP'){const s=$('#secretKey');s.textContent='SKYSTEP';s.classList.add('used');s.disabled=false;s.dataset.k='SKYSTEP'}
+    out(`[ACCESS GRANTED] KEY ${cmd}${fresh?'':'（取得済み）'}`);out(KEYS[cmd],'m');
+    $('#keyCount').textContent=`KEYS ${state.keys.size}/5`;updateClr();
+    if(state.keys.size===5&&fresh)out('','ok','<strong>【LEVEL 9 CLASSIFIED UNLOCKED】</strong><br>「大分から世界へ。システム開発と映像表現の融合で、誰も見たことがないプロダクトを創り出す。」<br><small>対象者TAIYOの真の野望データが開示された。</small>');
+    else if(fresh)out(`残り ${5-state.keys.size} 個。`,'m');
     return}
-  out('[ACCESS DENIED] INVALID PASSCODE. TRY AGAIN.','e');
+  alarm();out('[ACCESS DENIED] パスコードが違う。','e');
 }
 $('#termForm').addEventListener('submit',e=>{e.preventDefault();run(inp.value);inp.value=''});
-$$('#keys button').forEach(b=>b.onclick=()=>{run(b.dataset.k)});
+$$('#keys button').forEach(b=>b.addEventListener('click',()=>{if(b.dataset.k)run(b.dataset.k)}));
 
-/* qualifications counter + filter */
-const qn=$$('.q').length,qc=$('#qcount');
-const qio=new IntersectionObserver(es=>{if(es[0].isIntersecting){qio.disconnect();if(RM){qc.textContent=qn;return}let v=0;const id=setInterval(()=>{v++;qc.textContent=String(v).padStart(2,'0');if(v>=qn)clearInterval(id)},55)}},{threshold:.5});
-qc.textContent=String(qn).padStart(2,'0');if(!RM)qio.observe(qc);
+/* secret: type "taiyo" anywhere, or Konami */
+let buf='';const KON='ArrowUp,ArrowUp,ArrowDown,ArrowDown,ArrowLeft,ArrowRight,ArrowLeft,ArrowRight,KeyB,KeyA';let kb=[];
+addEventListener('keydown',e=>{if(e.target.matches('input'))return;
+  if(e.code==='Escape'&&!$('#secret').hidden){closeSecret();return}
+  kb=[...kb,e.code].slice(-10);if(kb.join(',')===KON){state.konami=true;setUVMode(true);alarm();toast('隠しコマンド受理。UVライトを強制点灯した。')}
+  const ch=/^Key[A-Z]$/.test(e.code)?e.code.slice(3).toLowerCase():'';if(!ch)return;buf=(buf+ch).slice(-5);if(buf==='taiyo'){buf='';hack()}});
+
+/* HACK → SECRET ARCHIVE */
+let hacking=false;
+function hack(){
+  if(hacking)return;hacking=true;state.backdoor=true;setUVMode(false);
+  const H=$('#hack'),rain=$('#hkRain'),sl=$('#hkSlices'),big=$('#hkBig');
+  if(RM){openSecret();hacking=false;return}
+  alarm();
+  setTimeout(()=>{
+  H.hidden=false;rain.innerHTML='';sl.innerHTML='';big.hidden=true;$('#hkBar').style.width='0';
+  for(let i=0;i<9;i++)sl.appendChild(document.createElement('i'));
+  const LN=[['> INTRUSION DETECTED ON CASE #8402','r'],['> 閲覧者が裏口を発見'],['> TRACE ROUTE: oita.jp → saiki → ????'],['> 暗号鍵を照合中…'],['> OVERRIDE: SUBJECT TAIYO HAS ENTERED THE CHAT','y'],['> firewall.sys ............ BYPASSED'],['> archive.lock ............ BROKEN'],['> 逆探知を開始。こちらも君を見ている。','r'],['> loading secret_archive.dat'],['> ██████████████████ 100%','y']];
+  const hex=()=>Array.from({length:16},()=>(Math.random()*256|0).toString(16).padStart(2,'0')).join(' ');
+  let li=0;
+  const rid=setInterval(()=>{
+    const d=document.createElement('div');
+    if(li<LN.length&&Math.random()<.45){d.textContent=LN[li][0];if(LN[li][1])d.className=LN[li][1];li++}
+    else d.textContent='0x'+(Math.random()*0xffffff|0).toString(16).padStart(6,'0')+'  '+hex();
+    rain.appendChild(d);while(rain.childNodes.length>60)rain.removeChild(rain.firstChild);
+    [...sl.children].forEach(s=>{s.style.top=Math.random()*100+'%';s.style.height=(2+Math.random()*30)+'px';s.style.opacity=Math.random()<.5?(.15+Math.random()*.5):0;s.style.transform=`translateX(${(Math.random()-.5)*80}px)`});
+  },45);
+  setTimeout(()=>{H.classList.add('flash');big.hidden=false;
+    const T=['SYSTEM BREACH','ACCESS REVERSED','裏口、開通。'];let ti=0;
+    const tid=setInterval(()=>{$('#hkTitle').textContent=T[Math.min(ti++,T.length-1)]},700);
+    let p=0;const pid=setInterval(()=>{p+=Math.random()*14;$('#hkBar').style.width=Math.min(100,p)+'%';
+      $('#hkSub').textContent=p<45?'逆探知を開始…':p<90?'シークレットアーカイブを復号中…':'復号完了';
+      if(p>=100){clearInterval(pid);clearInterval(tid);setTimeout(()=>{clearInterval(rid);H.classList.remove('flash');H.hidden=true;openSecret();hacking=false},500)}},120);
+  },1600);
+  },350);
+}
+function openSecret(){
+  const items=[['指紋スキャン',state.scan],[`黒塗りの解除（${state.rd}/${rds.length}）`,state.rd===rds.length],[`パスコード（${state.keys.size}/5）`,state.keys.size===5],['5つ目の鍵 SKYSTEP',state.keys.has('SKYSTEP')],['UVライトを使った',!!state.uv],['コナミコマンド',!!state.konami],['裏口を発見',true]];
+  $('#scAch').innerHTML=items.map(([t,g])=>`<li class="${g?'got':''}"><span>${t}</span><b>${g?'FOUND':'———'}</b></li>`).join('');
+  $('#scScore').textContent=items.filter(i=>i[1]).length+'/'+items.length;
+  const S=$('#secret');S.hidden=false;S.scrollTop=0;$('#scBack').focus({preventScroll:true});
+  const msg='ようこそ、調査員。ここは表のファイルには載っていない裏のアーカイブだ。君がどこまで調べたか、すべて記録されている。';
+  const el=$('#scType');if(RM){el.textContent=msg;return}
+  el.textContent='';let i=0;(function t(){el.textContent=msg.slice(0,++i);if(i<msg.length)setTimeout(t,35)})();
+}
+function closeSecret(){$('#secret').hidden=true;toast('裏口を閉じた。このことは誰にも言うな。')}
+$('#scBack').onclick=closeSecret;
+if(location.hash==='#secret')setTimeout(hack,1500);
+
+/* qualifications */
+const qn=$$('.q').length,qc=$('#qcount');qc.textContent=String(qn).padStart(2,'0');
+if(!RM){const qio=new IntersectionObserver(es=>{if(es[0].isIntersecting){qio.disconnect();let v=0;const id=setInterval(()=>{v++;qc.textContent=String(v).padStart(2,'0');if(v>=qn)clearInterval(id)},70)}},{threshold:.5});qio.observe(qc)}
 $$('#qfilter button').forEach(b=>b.onclick=()=>{const f=b.dataset.f;$$('#qfilter button').forEach(x=>x.setAttribute('aria-pressed',x===b));$$('.qb').forEach(q=>q.classList.toggle('dim',f!=='all'&&q.dataset.g!==f))});
 
-/* copy mail */
-$('#copyMail').onclick=()=>{const m=$('#mail').textContent;const sel=()=>{const r=document.createRange();r.selectNodeContents($('#mail'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('選択しました。コピーしてください')};
-  try{navigator.clipboard.writeText(m).then(()=>toast('アドレスをコピーしました'),sel)}catch(e){sel()}};
+/* copy */
+$$('.copy').forEach(btn=>btn.onclick=()=>{const m=btn.dataset.copy;const el=btn.parentElement.querySelector('.addr');
+  const sel=()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast('選択しました。コピーしてください')};
+  try{navigator.clipboard.writeText(m).then(()=>toast('コピーしました：'+m),sel)}catch(e){sel()}});
 
 /* mission log */
-const CAT={local:'地域活動',school:'学校行事',club:'部活動',award:'表彰',study:'探究'};
+const CAT={local:'地域活動',club:'部活動',award:'表彰'};
 const LOG=[
  ['2026.09.26','私学フェスタ','club','',1],
- ['2026.09.20','佐伯火まつり ボランティア','local','',1],
+ ['2026.09.20','佐伯火まつり ボランティア・アーティスト撮影','local','スーパーボーイズの写真・動画撮影を担当',1],
  ['2026.09.19','サイエンスフェスタ2026 in 大分','club','',1],
- ['2026.09.12','こどもマネー川柳 メットライフ生命賞','award','受賞',1],
+ ['2026.09.12','こどもマネー川柳 受賞','award','「お金より 知識増やせば 夢ふえる」',1],
  ['2026.09.06','うんこフェスタ ボランティア','local','',1],
  ['2026.08.28','SAKUフェス 実行委員会','local','6/27・7/25・7/26・8/5・8/28 の5回出動',5],
- ['2026.08.22','ふらっとスクールツアー','school','6/13・8/22 の2回',2],
- ['2026.08.01','オープンスクール活動','school','7/31・8/1 の2日間',2],
  ['2026.07.11','さいきキラキラ夜市 ボランティア','local','',1],
- ['2026.06.12','佐伯市美術展 審査員（2回目）','award','写真の部',1],
+ ['2026.06.12','佐伯市美術展 審査員（2回目）','award','部活動・写真の部',1],
  ['2026.05.02','はじまる体験キッズパーク','club','',1],
- ['2026.03.13','音楽を聞きながら勉強すると集中力はどうなるのか','study','探究活動',1],
- ['2026.02.25','鶴谷中学校 高校生と語る会','school','',1],
  ['2025.11.24','大分学検定 全体最高得点・高校生最高得点','award','二冠',1],
  ['2025.10.26','大分県発明くふう展 アイデア賞','award','受賞',1],
- ['2025.06.13','佐伯市美術展 審査員（1回目）','award','写真の部',1]
+ ['2025.06.13','佐伯市美術展 審査員（1回目）','award','部活動・写真の部',1]
 ];
 const fl=$('#flog');
-LOG.forEach(([d,t,c,n,k,s])=>{const li=document.createElement('li');li.className='le'+(c==='award'?' award':'')+(s?' sched':'');li.dataset.c=c;
-  li.innerHTML=`<div class="ld">${d}${s?'<small>SCHEDULED</small>':''}</div><div class="lt"><h3>${t}${k>1?` <span class="x">×${k}</span>`:''}</h3>${n?`<p>${n}</p>`:''}</div><span class="lc c-${c}">${CAT[c]}</span>`;fl.appendChild(li)});
-const sum=c=>LOG.filter(r=>r[2]===c).reduce((a,r)=>a+r[4],0);
-$('#fstats').innerHTML=`<div class="fs hot"><span class="lbl">REPORTS FILED</span><b>44</b></div><div class="fs"><span class="lbl">地域ボランティア</span><b>${sum('local')}</b></div><div class="fs"><span class="lbl">学校行事・部活</span><b>${sum('school')+sum('club')}</b></div><div class="fs"><span class="lbl">表彰・審査員</span><b>${sum('award')}</b></div>`;
+LOG.forEach(([d,t,cat,n,k,s])=>{const li=document.createElement('li');li.className='le'+(cat==='award'?' award':'')+(s?' sched':'');li.dataset.c=cat;
+  li.innerHTML=`<div class="ld">${d}${s?'<small>SCHEDULED</small>':''}</div><div class="lt"><h3>${t}${k>1?` <span class="x">×${k}</span>`:''}</h3>${n?`<p>${n}</p>`:''}</div><span class="lc c-${cat}">${CAT[cat]}</span>`;fl.appendChild(li)});
+const sum=k=>LOG.filter(r=>r[2]===k).reduce((a,r)=>a+r[4],0);
+$('#fstats').innerHTML=`<div class="fs hot"><span class="lbl">REPORTS FILED</span><b>44</b></div><div class="fs"><span class="lbl">地域ボランティア</span><b>${sum('local')}</b></div><div class="fs"><span class="lbl">部活動</span><b>${sum('club')}</b></div><div class="fs"><span class="lbl">表彰・審査員</span><b>${sum('award')}</b></div>`;
 const lf=$('#lfilter');
 [['all','ALL'],...Object.entries(CAT)].forEach(([k,v],i)=>{const b=document.createElement('button');b.type='button';b.textContent=v;b.setAttribute('aria-pressed',i===0);
   b.onclick=()=>{[...lf.children].forEach(x=>x.setAttribute('aria-pressed',x===b));$$('.le').forEach(l=>l.classList.toggle('hide',k!=='all'&&l.dataset.c!==k))};lf.appendChild(b)});
+
+/* console easter egg */
+try{console.log('%c CASE #8402 ','background:#ff2a4b;color:#000;font:bold 14px monospace','\nソースを覗いたな。君も調査員の素質がある。\nヒント：ページを一度クリックしてから、キーボードで t-a-i-y-o と打ってみろ（日本語入力のままでもOK）。\nスマホなら指紋スキャンを素早く5回。ターミナルで BACKDOOR でも開く。')}catch(e){}
 
 updateClr();
 })();
